@@ -13,60 +13,80 @@
   <body>
     <header class="top">
       <div>
-        <p class="marca">Código 402 · Stellar testnet</p>
-        <h1>Proveedores 402</h1>
-        <p class="lede" id="lede">El bar cobra en ROJOS. Cuando el stock baja, su agente le paga al proveedor en USDC y se detiene si el pedido no cabe en el tope.</p>
+        <p class="marca">Bar La Ruta · feria nocturna</p>
+        <h1>Cuando se acaba la cerveza, el bar pide solo</h1>
+        <p class="lede">Los clientes pagan en Party Pay con ROJOS. Si el stock baja del mínimo, el agente del bar le paga al proveedor en USDC, sin pasarse de un límite. El proveedor empaca, entrega o devuelve.</p>
       </div>
-      <div class="top-side">
-        <a id="link-rojos" href="https://stellar.expert/explorer/testnet" target="_blank" rel="noreferrer">ROJOS en Expert</a>
-        <a id="link-usdc" href="https://stellar.expert/explorer/testnet" target="_blank" rel="noreferrer">USDC en Expert</a>
-        <button id="reiniciar" type="button" class="ghost">Reiniciar la feria</button>
-      </div>
+      <button id="reiniciar" type="button" class="ghost">Empezar la demo de nuevo</button>
     </header>
 
-    <section id="aviso" class="aviso" hidden></section>
-
-    <ol class="pasos" id="pasos">
-      <li>Vender en Party Pay</li>
-      <li>El agente paga solo</li>
-      <li>Rechazar lo que se pasa</li>
-      <li>El proveedor entrega</li>
-      <li>Reembolso con tope</li>
+    <ol class="historia">
+      <li>
+        <span>1</span>
+        <div>
+          <strong>El cliente pide</strong>
+          <p>Paga ROJOS en el celular. El stock del bar baja.</p>
+        </div>
+      </li>
+      <li>
+        <span>2</span>
+        <div>
+          <strong>El agente paga</strong>
+          <p>Pide lo que falta y manda USDC. Si el monto se pasa del límite, no paga.</p>
+        </div>
+      </li>
+      <li>
+        <span>3</span>
+        <div>
+          <strong>El proveedor entrega</strong>
+          <p>Ve el pago, empaca y, si falta producto, devuelve una parte.</p>
+        </div>
+      </li>
     </ol>
+
+    <section id="aviso" class="aviso" hidden></section>
+    <section id="ahora" class="ahora"></section>
+    <section id="resultado" class="resultado" hidden></section>
 
     <main>
       <section class="panel party">
         <header>
-          <p class="kicker">Party Pay</p>
+          <p class="kicker">1 · El bar, en Party Pay</p>
           <h2 id="tienda">Bar La Ruta</h2>
-          <p class="sub" id="evento">Feria nocturna</p>
+          <p class="sub" id="evento">Aquí se vende. ROJOS es la moneda del cliente y se queda en la feria.</p>
         </header>
-        <p class="rojos">Cobrado esta noche: <strong id="rojos">0</strong> ROJOS</p>
+        <p class="rojos">Clientes pagaron esta noche: <strong id="rojos">0</strong> ROJOS</p>
         <div id="productos"></div>
       </section>
 
       <section class="panel agente">
         <header>
-          <p class="kicker">Agente de la tienda</p>
-          <h2>Paga solo, con tope</h2>
-          <p class="sub" id="topes"></p>
+          <p class="kicker">2 · El agente del bar</p>
+          <h2>Pide y paga solo</h2>
+          <p class="sub">USDC es lo que el bar le paga al proveedor. Hay un límite para que no gaste de más.</p>
         </header>
         <dl class="saldos" id="saldo-agente"></dl>
+        <div class="limites" id="limites"></div>
         <div class="acciones">
-          <button id="revisar" type="button">Revisar stock y pagar</button>
-          <button id="forzar" type="button" class="peligro">Pedir 40 Imperial y pasarse del tope</button>
-          <button id="sin-saldo" type="button" class="ghost">Probar con la billetera en cero</button>
-          <button id="repetir" type="button" class="ghost">Volver a pagar el mismo pedido</button>
-          <button id="juzgar" type="button" class="ghost">Comprobar el pago con otro monto</button>
+          <button id="revisar" type="button">Que el agente pida y pague</button>
         </div>
-        <p class="nota">En testnet cada Imperial se liquida a 0.01 USDC para que el demo quepa en una billetera de práctica. En el bar, la misma cerveza vale ₡700 y el cliente la paga en ROJOS.</p>
+        <details class="pruebas">
+          <summary>Probar que se detiene (para la evaluación)</summary>
+          <p>Estas acciones no son el día normal del bar. Sirven para mostrar que el agente no paga si algo no cuadra.</p>
+          <div class="acciones">
+            <button id="forzar" type="button" class="peligro">Intentar un pedido de 40, más caro que el límite</button>
+            <button id="sin-saldo" type="button" class="ghost">Ver qué pasa si la billetera está en cero</button>
+            <button id="repetir" type="button" class="ghost">Intentar pagar otra vez el mismo pedido</button>
+            <button id="juzgar" type="button" class="ghost">Revisar el pago como si el monto fuera otro</button>
+          </div>
+        </details>
       </section>
 
       <section class="panel proveedor">
         <header>
-          <p class="kicker">Proveedor</p>
+          <p class="kicker">3 · El proveedor</p>
           <h2 id="proveedor">Cervecería del Valle</h2>
-          <p class="sub">Alista solo lo que ya está verificado en Stellar.</p>
+          <p class="sub">Solo empaca si el pago ya se comprobó en Stellar. Si no puede llevar todo, devuelve una parte.</p>
         </header>
         <dl class="saldos" id="saldo-proveedor"></dl>
         <div id="pedidos"></div>
@@ -74,7 +94,8 @@
     </main>
 
     <section class="bitacora">
-      <h2>Bitácora</h2>
+      <h2>Qué ha pasado</h2>
+      <p class="sub" id="resumen"></p>
       <ol id="bitacora"></ol>
     </section>
     <script src="/app.js" type="module"></script>
