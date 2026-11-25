@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Proveedores 402 · reposición del bar</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23e23d2b'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,700&family=Outfit:wght@380;520;650&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div>
+        <p class="marca">Código 402 · Stellar testnet</p>
+        <h1>Proveedores 402</h1>
+        <p class="lede" id="lede">El bar cobra en ROJOS. Cuando el stock baja, su agente le paga al proveedor en USDC y se detiene si el pedido no cabe en el tope.</p>
+      </div>
+      <div class="top-side">
+        <a id="link-rojos" href="https://stellar.expert/explorer/testnet" target="_blank" rel="noreferrer">ROJOS en Expert</a>
+        <a id="link-usdc" href="https://stellar.expert/explorer/testnet" target="_blank" rel="noreferrer">USDC en Expert</a>
+        <button id="reiniciar" type="button" class="ghost">Reiniciar la feria</button>
+      </div>
+    </header>
+
+    <section id="aviso" class="aviso" hidden></section>
+
+    <ol class="pasos" id="pasos">
+      <li>Vender en Party Pay</li>
+      <li>El agente paga solo</li>
+      <li>Rechazar lo que se pasa</li>
+      <li>El proveedor entrega</li>
+      <li>Reembolso con tope</li>
+    </ol>
+
+    <main>
+      <section class="panel party">
+        <header>
+          <p class="kicker">Party Pay</p>
+          <h2 id="tienda">Bar La Ruta</h2>
+          <p class="sub" id="evento">Feria nocturna</p>
+        </header>
+        <p class="rojos">Cobrado esta noche: <strong id="rojos">0</strong> ROJOS</p>
+        <div id="productos"></div>
+      </section>
+
+      <section class="panel agente">
+        <header>
+          <p class="kicker">Agente de la tienda</p>
+          <h2>Paga solo, con tope</h2>
+          <p class="sub" id="topes"></p>
+        </header>
+        <dl class="saldos" id="saldo-agente"></dl>
+        <div class="acciones">
+          <button id="revisar" type="button">Revisar stock y pagar</button>
+          <button id="forzar" type="button" class="peligro">Pedir 40 Imperial y pasarse del tope</button>
+          <button id="sin-saldo" type="button" class="ghost">Probar con la billetera en cero</button>
+          <button id="repetir" type="button" class="ghost">Volver a pagar el mismo pedido</button>
+          <button id="juzgar" type="button" class="ghost">Comprobar el pago con otro monto</button>
+        </div>
+        <p class="nota">En testnet cada Imperial se liquida a 0.01 USDC para que el demo quepa en una billetera de práctica. En el bar, la misma cerveza vale ₡700 y el cliente la paga en ROJOS.</p>
+      </section>
+
+      <section class="panel proveedor">
+        <header>
+          <p class="kicker">Proveedor</p>
+          <h2 id="proveedor">Cervecería del Valle</h2>
+          <p class="sub">Alista solo lo que ya está verificado en Stellar.</p>
+        </header>
+        <dl class="saldos" id="saldo-proveedor"></dl>
+        <div id="pedidos"></div>
+      </section>
+    </main>
+
+    <section class="bitacora">
+      <h2>Bitácora</h2>
+      <ol id="bitacora"></ol>
+    </section>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

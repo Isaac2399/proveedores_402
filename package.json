@@ -1,9 +1,11 @@
 {
   "name": "proveedores_402",
   "version": "1.0.0",
-  "description": "API de proveedores que cobra con el protocolo x402 en Stellar testnet.",
-  "main": "index.js",
+  "description": "El agente de la tienda reabastece solo y paga al proveedor en USDC cuando Party Pay se queda sin stock.",
+  "main": "server.js",
   "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "preparar": "node --env-file-if-exists=.env scripts/preparar.js",
     "test": "node --env-file-if-exists=.env --test"
   },
   "repository": {
