@@ -154,7 +154,7 @@ function solucion() {
       <g class="foco">
         <rect class="panel-luz" x="24" y="36" width="372" height="150" rx="16" fill="#221812"/>
         <text x="44" y="84" font-size="16" fill="#ffb703">Límite de producto</text>
-        <text x="44" y="126" font-size="26" fill="#f6efe2">A las 24, pedir 50</text>
+        <text x="44" y="126" font-size="26" fill="#f6efe2">A las 20, pedir 50</text>
         <text x="44" y="158" font-size="16" fill="#cbbba6">cervezas del bar</text>
       </g>
       <g class="foco">
@@ -171,7 +171,7 @@ function recorrido() {
   s.append(el("p", "kicker", "En vivo"), el("h1", "", "Primero el celular. Después el distribuidor."));
   const grid = el("ol", "pasos lista");
   const items = [
-    "Se piden 4 cervezas. Quedan 24.",
+    "Se piden 4 cervezas. Quedan 20.",
     "La tienda pide 50 y paga 0.50 USDC.",
     "Un pedido de 80 se detiene.",
     "Se devuelven 4.",

@@ -90,7 +90,7 @@ function guion(estado) {
     const bajar = imperial.stock - imperial.minimo;
     return {
       n: 1, total, panel: "party", paso: "vender", sku: "imperial", unidades: String(bajar),
-      titulo: `Quedan ${imperial.stock}. A las 24 se pide.`,
+      titulo: `Quedan ${imperial.stock}. A las ${imperial.minimo} se pide.`,
       boton: `Pedir ${bajar} cervezas`,
     };
   }

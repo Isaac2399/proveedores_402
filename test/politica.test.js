@@ -29,9 +29,9 @@ test("recorta el pedido para no pasarse del tope", () => {
   assert.equal(decision.recortado, true);
 });
 
-test("al llegar a 24 pide 50 cervezas si el tope lo permite", () => {
+test("al llegar a 20 pide 50 cervezas si el tope lo permite", () => {
   const decision = decidirReposicion(
-    { ...imperial, stock: 24, pedidoUnidades: 50, maxUnidades: 50 },
+    { ...imperial, stock: 20, minimo: 20, pedidoUnidades: 50, maxUnidades: 50 },
     { topePedidoUsdc: 0.5, topeDiaUsdc: 0.5, gastadoHoyUsdc: 0 },
   );
   assert.equal(decision.ok, true);
