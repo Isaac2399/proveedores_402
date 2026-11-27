@@ -37,7 +37,7 @@ function conEscena(nodos, svg) {
 const camion = `
   <g class="camion">
     <rect x="248" y="214" width="78" height="52" rx="6" fill="#ffb703"/>
-    <text x="262" y="245" font-size="14" font-weight="700" fill="#1a120e">12 u.</text>
+    <text x="262" y="245" font-size="14" font-weight="700" fill="#1a120e">50 u.</text>
     <rect x="326" y="232" width="58" height="34" rx="5" fill="#f6efe2"/>
     <circle class="rueda" cx="276" cy="274" r="13" fill="#1a120e"/>
     <circle class="rueda" cx="352" cy="274" r="13" fill="#1a120e"/>
@@ -89,7 +89,7 @@ function party() {
         <text x="20" y="48" font-size="15" font-weight="700" fill="#e23d2b">PARTY PAY</text>
         <g class="pedido-pop">
           <rect x="16" y="70" width="168" height="48" rx="10" fill="#f6efe2"/>
-          <text x="28" y="99" font-size="15" fill="#1a120e">8 cervezas</text>
+          <text x="28" y="99" font-size="15" fill="#1a120e">4 cervezas</text>
         </g>
         <g class="pedido-pop d2">
           <rect x="16" y="128" width="168" height="48" rx="10" fill="#f6efe2"/>
@@ -154,13 +154,13 @@ function solucion() {
       <g class="foco">
         <rect class="panel-luz" x="24" y="36" width="372" height="150" rx="16" fill="#221812"/>
         <text x="44" y="84" font-size="16" fill="#ffb703">Límite de producto</text>
-        <text x="44" y="126" font-size="26" fill="#f6efe2">Pedir al llegar a 24</text>
+        <text x="44" y="126" font-size="26" fill="#f6efe2">A las 24, pedir 50</text>
         <text x="44" y="158" font-size="16" fill="#cbbba6">cervezas del bar</text>
       </g>
       <g class="foco">
         <rect class="panel-luz" x="24" y="214" width="372" height="150" rx="16" fill="#221812"/>
         <text x="44" y="262" font-size="16" fill="#ffb703">Límite de dinero</text>
-        <text x="44" y="304" font-size="26" fill="#f6efe2">50 cervezas</text>
+        <text x="44" y="304" font-size="26" fill="#f6efe2">0.50 USDC</text>
         <text x="44" y="336" font-size="16" fill="#cbbba6">y no un centavo más</text>
       </g>
     </svg>`);
@@ -168,15 +168,13 @@ function solucion() {
 
 function recorrido() {
   const s = el("section", "slide");
-  s.append(el("p", "kicker", "En vivo, seis clics"), el("h1", "", "Primero el celular. Después el distribuidor."));
+  s.append(el("p", "kicker", "En vivo"), el("h1", "", "Primero el celular. Después el distribuidor."));
   const grid = el("ol", "pasos lista");
   const items = [
-    "En Party Pay se piden 8 cervezas. El stock baja de 28 a 20.",
-    "Al llegar a 24, la tienda pide 50 cervezas y paga.",
-    "Un pedido de 80 se detiene. No sale dinero.",
-    "Si no hay producto, se devuelve todo el pedido.",
-    "El distribuidor empaca solo lo que va a llevar.",
-    "Al bar entran 8. Las 4 devueltas no vuelven al inventario.",
+    "Se piden 4 cervezas. Quedan 24.",
+    "La tienda pide 50 y paga 0.50 USDC.",
+    "Un pedido de 80 se detiene.",
+    "Si no hay producto, se devuelve todo.",
   ];
   items.forEach((item, i) => {
     const li = document.createElement("li");
@@ -203,7 +201,7 @@ function cierre() {
       </g>
       <g class="sale">
         <rect x="40" y="190" width="86" height="50" rx="6" fill="#ffb703"/>
-        <text x="58" y="220" font-size="16" font-weight="700" fill="#1a120e">8 u.</text>
+        <text x="58" y="220" font-size="16" font-weight="700" fill="#1a120e">50</text>
         <rect x="126" y="206" width="58" height="34" rx="5" fill="#f6efe2"/>
         <circle class="rueda" cx="68" cy="248" r="13" fill="#1a120e"/>
         <circle class="rueda" cx="156" cy="248" r="13" fill="#1a120e"/>
