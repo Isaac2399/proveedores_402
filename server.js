@@ -115,6 +115,10 @@ function armarRutas() {
 const httpPagos = armarRutas();
 if (httpPagos) app.use(paymentMiddlewareFromHTTPServer(httpPagos));
 
+app.get("/presentacion", (_req, res) => {
+  res.sendFile(join(raiz, "public", "presentacion.html"));
+});
+
 app.use(express.static(join(raiz, "public")));
 
 async function vista() {

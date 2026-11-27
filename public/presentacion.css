@@ -1,0 +1,162 @@
+:root {
+  --ink: #140e0c;
+  --paper: #f6efe2;
+  --muted: #cbbba6;
+  --amber: #ffb703;
+  --red: #e23d2b;
+  --good: #8fd9cc;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  font-family: Outfit, sans-serif;
+  color: var(--paper);
+  background: var(--ink);
+  overflow: hidden;
+}
+h1, h2, .serif { font-family: Fraunces, serif; font-weight: 560; }
+button, a { font: inherit; }
+#deck { height: calc(100% - 3.4rem); }
+.slide {
+  display: none;
+  height: 100%;
+  padding: clamp(1.4rem, 4vh, 3.2rem) clamp(1.2rem, 5vw, 4.5rem) 1rem;
+}
+.slide.activa { display: flex; flex-direction: column; justify-content: center; }
+.kicker {
+  margin: 0 0 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: var(--amber);
+}
+h1 {
+  margin: 0;
+  font-size: clamp(2.6rem, 6.4vw, 5.4rem);
+  line-height: 0.98;
+  max-width: 16ch;
+}
+.bajada {
+  margin: 1rem 0 0;
+  max-width: 38rem;
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  color: var(--muted);
+}
+.lista {
+  list-style: none;
+  padding: 0;
+  margin: 1.4rem 0 0;
+  display: grid;
+  gap: 0.85rem;
+}
+.lista li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  align-items: baseline;
+  font-size: clamp(1.25rem, 2.4vw, 2rem);
+  line-height: 1.2;
+}
+.lista span {
+  color: var(--amber);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85em;
+}
+.dos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(0.8rem, 2vw, 1.6rem);
+  margin-top: 1.4rem;
+}
+.lado {
+  border-radius: 22px;
+  padding: 1.2rem 1.3rem 1.4rem;
+  min-width: 0;
+}
+.lado.party { background: #2a1412; }
+.lado.usdc { background: #241c10; }
+.lado h2 { margin: 0.2rem 0 0.45rem; font-size: clamp(2rem, 4vw, 3.2rem); }
+.lado p { margin: 0; font-size: clamp(1.05rem, 1.7vw, 1.3rem); color: var(--muted); }
+.lado .kicker { color: var(--red); }
+.lado.usdc .kicker { color: var(--amber); }
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+.numeros div {
+  background: #221812;
+  border-radius: 16px;
+  padding: 0.9rem 1rem;
+}
+.numeros strong {
+  display: block;
+  font-family: Fraunces, serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 560;
+}
+.numeros span { color: var(--muted); }
+.pasos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem 1.4rem;
+  margin-top: 1.2rem;
+}
+.pasos li { font-size: clamp(1.05rem, 1.8vw, 1.35rem); }
+.cierre h1 { max-width: 18ch; }
+.ir {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 1.4rem;
+  background: var(--amber);
+  color: #2a1603;
+  text-decoration: none;
+  font-weight: 650;
+  border-radius: 999px;
+  padding: 0.9rem 1.3rem;
+  font-size: 1.15rem;
+}
+.nota { margin-top: 0.8rem; color: var(--muted); max-width: 40rem; }
+.barra {
+  height: 3.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1rem;
+  border-top: 1px solid rgba(246, 239, 226, 0.12);
+}
+.barra a { color: var(--muted); text-decoration: none; white-space: nowrap; }
+.puntos { display: flex; gap: 0.35rem; }
+.puntos button {
+  width: 1.5rem;
+  height: 0.28rem;
+  border: 0;
+  border-radius: 99px;
+  padding: 0;
+  background: rgba(246, 239, 226, 0.25);
+  cursor: pointer;
+}
+.puntos button.activo { background: var(--amber); }
+.nav { display: flex; align-items: center; gap: 0.55rem; }
+.nav button {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(246, 239, 226, 0.2);
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+}
+#contador { color: var(--muted); font-variant-numeric: tabular-nums; min-width: 3.2rem; text-align: center; }
+@media (max-width: 800px) {
+  body { overflow-x: hidden; overflow-y: auto; }
+  #deck { height: auto; min-height: calc(100svh - 3.4rem); }
+  .slide, .slide.activa { min-height: calc(100svh - 3.4rem); overflow-x: hidden; }
+  .dos, .numeros, .pasos { grid-template-columns: 1fr; }
+  h1 { font-size: 2.3rem; }
+  .puntos { display: none; }
+  .barra { padding-inline: 0.7rem; }
+}

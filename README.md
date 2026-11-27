@@ -25,6 +25,8 @@ En testnet cada Imperial se liquida a 0.01 USDC para que el demo quepa en una bi
 
 Topes de fábrica: 0.12 USDC por pedido, 0.30 USDC al día, 0.08 USDC por reembolso.
 
+La presentación para proyectar está en `/presentacion` (flechas del teclado). La última diapositiva abre la demo.
+
 ## Guion de 5 minutos
 
 1. Abre la app. A la izquierda está Bar La Ruta, al centro el agente, a la derecha Cervecería del Valle.
