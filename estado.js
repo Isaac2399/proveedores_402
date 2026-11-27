@@ -196,6 +196,8 @@ export function marcarReembolso(id, { unidades, hash, experto }) {
   const pedido = porId(estado, id);
   if (!pedido) throw new Error("No está ese pedido.");
   pedido.unidadesReembolsadas += unidades;
+  pedido.reembolsos = pedido.reembolsos || [];
+  pedido.reembolsos.push({ unidades, hash, experto });
   pedido.reembolsoHash = hash;
   pedido.reembolsoExperto = experto;
   if (pedido.unidadesReembolsadas >= pedido.unidades && pedido.estado !== "entregado") {

@@ -174,7 +174,8 @@ function recorrido() {
     "Se piden 4 cervezas. Quedan 24.",
     "La tienda pide 50 y paga 0.50 USDC.",
     "Un pedido de 80 se detiene.",
-    "Si no hay producto, se devuelve todo.",
+    "Se devuelven 4.",
+    "Si no hay más producto, se devuelve el resto.",
   ];
   items.forEach((item, i) => {
     const li = document.createElement("li");

@@ -82,7 +82,7 @@ function guion(estado) {
   const imperial = estado.productos.find((p) => p.sku === "imperial");
   const abierto = estado.pedidos.find((p) => p.verificado && p.estado === "pagado");
   const empacando = estado.pedidos.find((p) => p.estado === "alistando");
-  const total = 4;
+  const total = 5;
   if (!estado.listo) {
     return { n: 1, total, panel: null, titulo: "Faltan las billeteras", boton: null };
   }
@@ -108,10 +108,19 @@ function guion(estado) {
       boton: "Pedir 80",
     };
   }
-  if (abierto && !abierto.reembolsoHash) {
+  const devueltas = abierto ? (abierto.unidadesReembolsadas || 0) : 0;
+  const quedan = abierto ? abierto.unidades - devueltas : 0;
+  if (abierto && devueltas === 0) {
     return {
-      n: 4, total, panel: "sistema", paso: "reembolso", id: abierto.id, unidades: String(abierto.unidades),
-      titulo: "No hay producto. Devolver todo.",
+      n: 4, total, panel: "sistema", paso: "reembolso", id: abierto.id, unidades: "4",
+      titulo: "Devolver 4.",
+      boton: "Devolver 4",
+    };
+  }
+  if (abierto && quedan > 0) {
+    return {
+      n: 5, total, panel: "sistema", paso: "reembolso", id: abierto.id, unidades: String(quedan),
+      titulo: "Si no hay más, devolver el resto.",
       boton: "Devolver todo",
     };
   }
@@ -124,13 +133,13 @@ function guion(estado) {
   }
   if (empacando) {
     return {
-      n: 4, total, panel: "sistema", paso: "entregar", id: empacando.id,
+      n: 5, total, panel: "sistema", paso: "entregar", id: empacando.id,
       titulo: "Ya llegó al bar.",
       boton: "Entregar",
     };
   }
   return {
-    n: 4, total, panel: "sistema", paso: "reiniciar",
+    n: 5, total, panel: "sistema", paso: "reiniciar",
     titulo: "Listo.",
     boton: "Otra noche",
   };

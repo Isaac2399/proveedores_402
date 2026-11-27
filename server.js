@@ -101,9 +101,11 @@ function armarRutas() {
     if (context.path.endsWith("/api/reembolso")) {
       const pedido = estado.porId(db, body.pedidoId);
       if (!pedido) return { abort: true, reason: "No existe ese pedido. No se reembolsa." };
-      if (pedido.reembolsoHash) return { abort: true, reason: "Ese reembolso ya se pagó. No se cobra otra vez." };
+      if ((pedido.unidadesReembolsadas || 0) >= pedido.unidades) {
+        return { abort: true, reason: "Ese pedido ya se devolvió por completo. No se cobra otra vez." };
+      }
       if (!conPago) return;
-      if (!ocupar(`reembolso-${pedido.id}`)) {
+      if (!ocupar(`reembolso-${pedido.id}-${pedido.unidadesReembolsadas || 0}`)) {
         return { abort: true, reason: "Ese reembolso ya está en curso. No se firma otro pago." };
       }
     }
@@ -213,7 +215,10 @@ app.post("/api/reembolso", (req, res) => {
   } catch (error) {
     res.status(400).json({ ok: false, mensaje: error.message });
   } finally {
-    if (req.body?.pedidoId) soltar(`reembolso-${req.body.pedidoId}`);
+    if (req.body?.pedidoId) {
+      const pedido = estado.porId(estado.leer(), req.body.pedidoId);
+      soltar(`reembolso-${req.body.pedidoId}-${pedido?.unidadesReembolsadas || 0}`);
+    }
   }
 });
 
@@ -420,15 +425,17 @@ app.post("/api/pedidos/:id/reembolsar", async (req, res) => {
       return;
     }
     const item = estado.producto(db, pedido.sku);
-    const unidades = Number(req.body.unidades);
+    const unidades = Number(req.body?.unidades);
     const usdc = cotizar(item.precioUsdc, unidades);
+    const ya = pedido.unidadesReembolsadas ? cotizar(item.precioUsdc, pedido.unidadesReembolsadas) : 0;
+    const restante = Math.round((pedido.usdc - ya) * 100) / 100;
     const saldo = (await saldos(process.env.MI_PUBLICA)).usdc;
     const juicio = evaluarReembolso({
       usdc,
       tope: reglas().topeReembolsoUsdc,
       saldo,
-      yaReembolsado: Boolean(pedido.reembolsoHash),
-      restante: pedido.usdc,
+      yaReembolsado: restante <= 0,
+      restante,
     });
     if (!juicio.ok) {
       estado.anotar( juicio.codigo, juicio.mensaje);

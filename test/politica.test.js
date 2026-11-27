@@ -59,6 +59,7 @@ test("el reembolso también respeta tope, saldo y un solo pago", () => {
   assert.equal(evaluarReembolso({ usdc: 0.5, tope: 0.08, saldo: 1, yaReembolsado: false, restante: 0.5 }).ok, true);
   assert.equal(evaluarReembolso({ usdc: 0.04, tope: 0.08, saldo: 0.01, yaReembolsado: false, restante: 0.12 }).codigo, "saldo");
   assert.equal(evaluarReembolso({ usdc: 0.04, tope: 0.08, saldo: 1, yaReembolsado: true, restante: 0.12 }).codigo, "repetido");
+  assert.equal(evaluarReembolso({ usdc: 0.46, tope: 0.5, saldo: 1, yaReembolsado: false, restante: 0.46 }).ok, true);
   assert.equal(evaluarReembolso({ usdc: 0.04, tope: 0.08, saldo: 1, yaReembolsado: false, restante: 0.12 }).ok, true);
 });
 
