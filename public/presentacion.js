@@ -160,7 +160,7 @@ function solucion() {
       <g class="foco">
         <rect class="panel-luz" x="24" y="214" width="372" height="150" rx="16" fill="#221812"/>
         <text x="44" y="262" font-size="16" fill="#ffb703">Límite de dinero</text>
-        <text x="44" y="304" font-size="26" fill="#f6efe2">0.12 USDC</text>
+        <text x="44" y="304" font-size="26" fill="#f6efe2">50 cervezas</text>
         <text x="44" y="336" font-size="16" fill="#cbbba6">y no un centavo más</text>
       </g>
     </svg>`);
@@ -172,9 +172,9 @@ function recorrido() {
   const grid = el("ol", "pasos lista");
   const items = [
     "En Party Pay se piden 8 cervezas. El stock baja de 28 a 20.",
-    "La tienda paga 12, no 16. El límite es 0.12 USDC.",
-    "Un pedido de 40 se detiene. No sale dinero.",
-    "Devolver todo también se detiene. Devolver 4 sí.",
+    "Al llegar a 24, la tienda pide 50 cervezas y paga.",
+    "Un pedido de 80 se detiene. No sale dinero.",
+    "Si no hay producto, se devuelve todo el pedido.",
     "El distribuidor empaca solo lo que va a llevar.",
     "Al bar entran 8. Las 4 devueltas no vuelven al inventario.",
   ];
@@ -196,7 +196,7 @@ function cierre() {
     <svg viewBox="0 0 420 320">
       <rect x="36" y="40" width="150" height="92" rx="16" fill="#24362f"/>
       <text x="52" y="78" font-size="16" fill="#8fd9cc">Cuenta</text>
-      <text x="52" y="108" font-size="22" fill="#f6efe2">0.12 USDC</text>
+      <text x="52" y="108" font-size="22" fill="#f6efe2">50 cervezas</text>
       <g class="check">
         <circle cx="214" cy="86" r="22" fill="#8fd9cc"/>
         <path d="M204 86 l8 8 14-16" fill="none" stroke="#14312c" stroke-width="3"/>

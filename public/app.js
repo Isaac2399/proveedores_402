@@ -82,61 +82,55 @@ function guion(estado) {
   const imperial = estado.productos.find((p) => p.sku === "imperial");
   const abierto = estado.pedidos.find((p) => p.verificado && p.estado === "pagado");
   const empacando = estado.pedidos.find((p) => p.estado === "alistando");
-  const total = 6;
+  const total = 4;
   if (!estado.listo) {
     return { n: 1, total, panel: null, titulo: "Faltan las billeteras", boton: null };
   }
   if (!abierto && !empacando && imperial.stock > imperial.minimo) {
+    const bajar = imperial.stock - imperial.minimo;
     return {
-      n: 1, total, panel: "party", paso: "vender", sku: "imperial", unidades: "8",
-      titulo: `Quedan ${imperial.stock}. Un cliente pide.`,
-      boton: "Pedir 8 cervezas",
+      n: 1, total, panel: "party", paso: "vender", sku: "imperial", unidades: String(bajar),
+      titulo: `Quedan ${imperial.stock}. A las 24 se pide.`,
+      boton: `Pedir ${bajar} cervezas`,
     };
   }
   if (!abierto && !empacando) {
     return {
       n: 2, total, panel: "sistema", paso: "revisar",
-      titulo: `Quedan ${imperial.stock}. La tienda paga.`,
-      boton: "Pagar",
+      titulo: `Quedan ${imperial.stock}. Pedir 50.`,
+      boton: "Pagar 50 cervezas",
     };
   }
-  if (abierto && !despuesDe(estado, abierto, "tope", "0.40")) {
+  if (abierto && !despuesDe(estado, abierto, "tope", "0.80")) {
     return {
       n: 3, total, panel: "sistema", paso: "forzar",
-      titulo: "40 no caben en el límite.",
-      boton: "Pedir 40",
-    };
-  }
-  if (abierto && !despuesDe(estado, abierto, "tope", "reembolso")) {
-    return {
-      n: 4, total, panel: "sistema", paso: "reembolso", id: abierto.id, unidades: String(abierto.unidades),
-      titulo: "Devolver todo no cabe.",
-      boton: "Devolver todo",
+      titulo: "80 no caben en el límite.",
+      boton: "Pedir 80",
     };
   }
   if (abierto && !abierto.reembolsoHash) {
     return {
-      n: 5, total, panel: "sistema", paso: "reembolso", id: abierto.id, unidades: "4",
-      titulo: "Devolver 4 sí cabe.",
-      boton: "Devolver 4",
+      n: 4, total, panel: "sistema", paso: "reembolso", id: abierto.id, unidades: String(abierto.unidades),
+      titulo: "No hay producto. Devolver todo.",
+      boton: "Devolver todo",
     };
   }
   if (abierto) {
     return {
-      n: 6, total, panel: "sistema", paso: "alistar", id: abierto.id,
+      n: 4, total, panel: "sistema", paso: "alistar", id: abierto.id,
       titulo: "Empacar lo que sí va.",
       boton: "Empacar",
     };
   }
   if (empacando) {
     return {
-      n: 6, total, panel: "sistema", paso: "entregar", id: empacando.id,
+      n: 4, total, panel: "sistema", paso: "entregar", id: empacando.id,
       titulo: "Ya llegó al bar.",
       boton: "Entregar",
     };
   }
   return {
-    n: 6, total, panel: "sistema", paso: "reiniciar",
+    n: 4, total, panel: "sistema", paso: "reiniciar",
     titulo: "Listo.",
     boton: "Otra noche",
   };
@@ -364,7 +358,7 @@ document.body.addEventListener("click", async (event) => {
     let data = {};
     const paso = btn.dataset.paso || btn.id;
     if (paso === "revisar") data = await post("/api/agente/revisar");
-    else if (paso === "forzar") data = await post("/api/agente/forzar", { sku: "imperial", unidades: 40 });
+    else if (paso === "forzar") data = await post("/api/agente/forzar", { sku: "imperial", unidades: 80 });
     else if (paso === "sin-saldo") data = await post("/api/agente/sin-saldo", { sku: "imperial", unidades: 12 });
     else if (paso === "repetir") data = await post("/api/agente/repetir");
     else if (paso === "juzgar") data = await post("/api/pagos/juzgar", { monto: "9.99" });

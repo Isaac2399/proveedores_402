@@ -29,6 +29,17 @@ test("recorta el pedido para no pasarse del tope", () => {
   assert.equal(decision.recortado, true);
 });
 
+test("al llegar a 24 pide 50 cervezas si el tope lo permite", () => {
+  const decision = decidirReposicion(
+    { ...imperial, stock: 24, pedidoUnidades: 50, maxUnidades: 50 },
+    { topePedidoUsdc: 0.5, topeDiaUsdc: 0.5, gastadoHoyUsdc: 0 },
+  );
+  assert.equal(decision.ok, true);
+  assert.equal(decision.unidades, 50);
+  assert.equal(decision.usdc, 0.5);
+  assert.equal(decision.recortado, false);
+});
+
 test("rechaza cuando el tope del día ya no alcanza ni una unidad", () => {
   const decision = decidirReposicion(imperial, { ...topes, gastadoHoyUsdc: 0.3 });
   assert.equal(decision.ok, false);
@@ -45,7 +56,7 @@ test("no firma si la API cobra de más, si no hay saldo o si el pedido ya se pag
 });
 
 test("el reembolso también respeta tope, saldo y un solo pago", () => {
-  assert.equal(evaluarReembolso({ usdc: 0.12, tope: 0.08, saldo: 1, yaReembolsado: false, restante: 0.12 }).codigo, "tope");
+  assert.equal(evaluarReembolso({ usdc: 0.5, tope: 0.08, saldo: 1, yaReembolsado: false, restante: 0.5 }).ok, true);
   assert.equal(evaluarReembolso({ usdc: 0.04, tope: 0.08, saldo: 0.01, yaReembolsado: false, restante: 0.12 }).codigo, "saldo");
   assert.equal(evaluarReembolso({ usdc: 0.04, tope: 0.08, saldo: 1, yaReembolsado: true, restante: 0.12 }).codigo, "repetido");
   assert.equal(evaluarReembolso({ usdc: 0.04, tope: 0.08, saldo: 1, yaReembolsado: false, restante: 0.12 }).ok, true);

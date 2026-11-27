@@ -24,9 +24,9 @@ function escribirEnv(valores) {
     `MI_SECRETA=${valores.MI_SECRETA}`,
     `AGENTE_PUBLICA=${valores.AGENTE_PUBLICA}`,
     `AGENTE_SECRETA=${valores.AGENTE_SECRETA}`,
-    `TOPE_PEDIDO=${valores.TOPE_PEDIDO || "$0.12"}`,
-    `TOPE_DIA=${valores.TOPE_DIA || "$0.30"}`,
-    `TOPE_REEMBOLSO=${valores.TOPE_REEMBOLSO || "$0.08"}`,
+    `TOPE_PEDIDO=${valores.TOPE_PEDIDO || "$0.50"}`,
+    `TOPE_DIA=${valores.TOPE_DIA || "$0.50"}`,
+    `TOPE_REEMBOLSO=${valores.TOPE_REEMBOLSO || "$0.50"}`,
     `PORT=${valores.PORT || "4317"}`,
     "",
   ];

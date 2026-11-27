@@ -16,7 +16,8 @@ const PRODUCTOS = [
     minimo: 24,
     ventaDiaria: 18,
     cubrirDias: 2,
-    maxUnidades: 36,
+    pedidoUnidades: 50,
+    maxUnidades: 50,
     precioUsdc: 0.01,
     precioLista: 700,
     rojosPorUnidad: 2,
@@ -65,7 +66,12 @@ function semilla() {
 export function leer() {
   if (!existsSync(archivo())) return semilla();
   const guardado = JSON.parse(readFileSync(archivo(), "utf8"));
-  return { ...semilla(), ...guardado, productos: guardado.productos || semilla().productos };
+  const porSku = new Map((guardado.productos || []).map((p) => [p.sku, p]));
+  const productos = PRODUCTOS.map((base) => {
+    const previo = porSku.get(base.sku);
+    return previo ? { ...base, stock: previo.stock } : { ...base };
+  });
+  return { ...semilla(), ...guardado, productos };
 }
 
 export function guardar(estado) {

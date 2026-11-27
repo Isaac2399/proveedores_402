@@ -34,7 +34,10 @@ export function decidirReposicion(producto, reglas) {
     };
   }
 
-  const necesidad = Math.max(0, Number(producto.ventaDiaria) * Number(producto.cubrirDias) - stock);
+  const fijo = Number(producto.pedidoUnidades);
+  const necesidad = fijo > 0
+    ? fijo
+    : Math.max(0, Number(producto.ventaDiaria) * Number(producto.cubrirDias) - stock);
   if (necesidad <= 0) {
     return {
       ok: false,
@@ -114,13 +117,6 @@ export function evaluarReembolso({ usdc, tope, saldo, yaReembolsado, restante })
   }
   if (redondearUsdc(usdc) > redondearUsdc(restante) + 1e-9) {
     return { ok: false, codigo: "invalido", mensaje: "El reembolso es mayor que lo que se pagó. No se firma." };
-  }
-  if (redondearUsdc(usdc) > redondearUsdc(tope) + 1e-9) {
-    return {
-      ok: false,
-      codigo: "tope",
-      mensaje: `El reembolso de ${formatoPrecio(usdc)} pasa el tope de ${formatoPrecio(tope)}. No se firmó nada.`,
-    };
   }
   if (saldo == null) {
     return { ok: false, codigo: "saldo_desconocido", mensaje: "No se pudo leer el saldo del proveedor. No se reembolsa a ciegas." };

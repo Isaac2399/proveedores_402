@@ -12,9 +12,9 @@ function leerTope(nombre, fallo) {
 
 export function topes() {
   return {
-    pedido: leerTope("TOPE_PEDIDO", "$0.12"),
-    dia: leerTope("TOPE_DIA", "$0.30"),
-    reembolso: leerTope("TOPE_REEMBOLSO", "$0.08"),
+    pedido: leerTope("TOPE_PEDIDO", "$0.50"),
+    dia: leerTope("TOPE_DIA", "$0.50"),
+    reembolso: leerTope("TOPE_REEMBOLSO", "$0.50"),
   };
 }
 
