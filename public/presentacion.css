@@ -155,7 +155,6 @@ h1 {
   line-height: 0.98;
   max-width: 16ch;
 }
-h1.corte { max-width: 15ch; }
 .bajada {
   margin: 1rem 0 0;
   max-width: 38rem;

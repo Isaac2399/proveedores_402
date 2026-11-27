@@ -166,32 +166,6 @@ function solucion() {
     </svg>`);
 }
 
-function regla() {
-  const s = el("section", "slide");
-  s.append(
-    el("p", "kicker", "La cuenta"),
-    el("h1", "corte", "Hacen falta 16. Se pagan 12."),
-    lista([
-      "Quedan 20. Se pide desde 24.",
-      "16 cervezas son 0.16 USDC.",
-      "El límite es 0.12. Entran 12.",
-    ]),
-  );
-  const nums = el("div", "numeros");
-  for (const [valor, etiqueta] of [
-    ["0.12 USDC", "Un pedido. 12 cervezas."],
-    ["0.30 USDC", "Todo el día."],
-    ["0.08 USDC", "Una devolución. 8 cervezas."],
-  ]) {
-    const d = document.createElement("div");
-    d.append(el("strong", "", valor), el("span", "", etiqueta));
-    nums.append(d);
-  }
-  s.append(nums);
-  s.append(el("p", "nota", "En el bar, ₡700. En la demo, 0.01 USDC por cerveza."));
-  return s;
-}
-
 function recorrido() {
   const s = el("section", "slide");
   s.append(el("p", "kicker", "En vivo, seis clics"), el("h1", "", "Primero el celular. Después el distribuidor."));
@@ -242,7 +216,7 @@ function cierre() {
   return s;
 }
 
-const slides = [portada(), party(), problema(), solucion(), regla(), recorrido(), cierre()];
+const slides = [portada(), party(), problema(), solucion(), recorrido(), cierre()];
 slides.forEach((s) => deck.append(s));
 
 let actual = 0;
