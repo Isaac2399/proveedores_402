@@ -54,7 +54,7 @@ async function post(url, body) {
 }
 
 const ESTADOS = {
-  pagado: "Pagado. Falta que el proveedor empague.",
+  pagado: "Pagado. El distribuidor ya puede empacar.",
   alistando: "El proveedor lo está empacando.",
   entregado: "Ya llegó al bar.",
   observado: "El pago no cuadra. No se empaca.",
@@ -89,22 +89,22 @@ function guion(estado) {
   if (!abierto && !empacando && imperial.stock > imperial.minimo) {
     return {
       n: 1, total, panel: "party", paso: "vender", sku: "imperial", unidades: "8",
-      titulo: "Llegan clientes y piden cerveza",
-      texto: `En el bar quedan ${imperial.stock} Imperial. Con una ronda de pedidos ya no alcanza para la noche. Cada cerveza se cobra en ROJOS, la moneda de la feria.`,
-      boton: "Se vendieron 8 cervezas",
+      titulo: "En Party Pay, un cliente pide",
+      texto: `A la izquierda, en el celular. Quedan ${imperial.stock} Imperial. Ocho pedidos más y el bar se queda corto. El cliente paga en ROJOS.`,
+      boton: "Pedir 8 Imperial en Party Pay",
     };
   }
   if (!abierto && !empacando) {
     return {
-      n: 2, total, panel: "agente", paso: "revisar",
-      titulo: "El bar pide más, sin pasarse del presupuesto",
-      texto: `Quedan ${imperial.stock} Imperial y el mínimo es ${imperial.minimo}. El agente pide lo que falta para aguantar la noche, pero solo paga lo que cabe en ${estado.topes.pedido}.`,
-      boton: "El agente pide y paga",
+      n: 2, total, panel: "sistema", paso: "revisar",
+      titulo: "La tienda le paga sola al distribuidor",
+      texto: `A la derecha. Quedan ${imperial.stock} Imperial y el mínimo es ${imperial.minimo}. La tienda pide lo que falta y paga ahora, sin pasarse de ${estado.topes.pedido}.`,
+      boton: "Pagar la reposición",
     };
   }
   if (abierto && !despuesDe(estado, abierto, "tope", "0.40")) {
     return {
-      n: 3, total, panel: "agente", paso: "forzar",
+      n: 3, total, panel: "sistema", paso: "forzar",
       titulo: "Si el pedido es muy grande, no paga",
       texto: "El pedido de verdad ya se pagó. Ahora pedimos 40 cervezas a propósito. Eso cuesta más que el presupuesto, así que el agente se detiene y no manda dinero.",
       boton: "Pedir 40 y ver que se detiene",
@@ -112,7 +112,7 @@ function guion(estado) {
   }
   if (abierto && !despuesDe(estado, abierto, "tope", "reembolso")) {
     return {
-      n: 4, total, panel: "proveedor", paso: "reembolso", id: abierto.id, unidades: String(abierto.unidades),
+      n: 4, total, panel: "sistema", paso: "reembolso", id: abierto.id, unidades: String(abierto.unidades),
       titulo: "No se puede devolver el pedido entero",
       texto: "El proveedor quiere devolver todo el dinero. Eso se pasa del límite de devolución, así que el sistema no lo deja.",
       boton: "Intentar devolver todo",
@@ -120,7 +120,7 @@ function guion(estado) {
   }
   if (abierto && !abierto.reembolsoHash) {
     return {
-      n: 5, total, panel: "proveedor", paso: "reembolso", id: abierto.id, unidades: "4",
+      n: 5, total, panel: "sistema", paso: "reembolso", id: abierto.id, unidades: "4",
       titulo: "Devuelve solo lo que no cabe en el camión",
       texto: "4 cervezas no van. Esa devolución sí cabe en el límite y el dinero regresa al bar.",
       boton: "Devolver 4 cervezas",
@@ -128,7 +128,7 @@ function guion(estado) {
   }
   if (abierto) {
     return {
-      n: 6, total, panel: "proveedor", paso: "alistar", id: abierto.id,
+      n: 6, total, panel: "sistema", paso: "alistar", id: abierto.id,
       titulo: "El proveedor empaca lo que sí va a llevar",
       texto: "El pago ya está confirmado. El proveedor empaca las cervezas que no se devolvieron.",
       boton: "Empacar el pedido",
@@ -136,24 +136,69 @@ function guion(estado) {
   }
   if (empacando) {
     return {
-      n: 6, total, panel: "proveedor", paso: "entregar", id: empacando.id,
+      n: 6, total, panel: "sistema", paso: "entregar", id: empacando.id,
       titulo: "La cerveza llega al bar",
       texto: "Al confirmar, el stock sube solo con lo que sí llegó. Lo devuelto no entra.",
       boton: "Ya llegó al bar",
     };
   }
   return {
-    n: 6, total, panel: null, paso: "reiniciar",
-    titulo: "Eso es el sistema",
-    texto: "El cliente compra, el bar pide solo cuando falta producto, paga sin pasarse del presupuesto y el proveedor entrega o devuelve. Listo para otra noche.",
+    n: 6, total, panel: "sistema", paso: "reiniciar",
+    titulo: "Eso es la continuación",
+    texto: "Party Pay vendió. La tienda pagó sola, el distribuidor cobró antes de salir y llevó solo lo que sí cabía. Listo para otra noche.",
     boton: "Empezar otra noche",
   };
 }
 
+function promesa(titulo, texto) {
+  const div = document.createElement("article");
+  div.className = "promesa";
+  const s = document.createElement("span");
+  s.textContent = titulo;
+  const strong = document.createElement("strong");
+  strong.textContent = texto;
+  div.append(s, strong);
+  return div;
+}
+
+function textosPromesa(estado) {
+  const activo = estado.pedidos.find((p) => p.estado === "pagado" || p.estado === "alistando");
+  const ultimoPedido = estado.pedidos[0];
+  const pedido = activo || ultimoPedido;
+  const bajo = estado.productos.some((p) => p.stock <= p.minimo);
+  let pago = "Party Pay todavía alcanza. La tienda no ha tenido que pagar.";
+  if (bajo && !activo) pago = `El inventario bajó del mínimo. La tienda puede pagar sola, hasta ${estado.topes.pedido}.`;
+  if (activo) pago = `La tienda ya pagó ${dinero(activo.usdc)} sola, sin armar el pedido a mano.`;
+  let ruta = "Todavía no hay ruta. El distribuidor no sale.";
+  let dineroAntes = "Cuando la tienda pague, el dinero entra antes de cargar el camión.";
+  if (pedido) {
+    const llevan = pedido.unidades - (pedido.unidadesReembolsadas || 0);
+    if (pedido.estado === "pagado") ruta = `Llevar ${llevan} de ${pedido.nombre}. Ya se puede empacar.`;
+    else if (pedido.estado === "alistando") ruta = `Sale ahora: ${llevan} de ${pedido.nombre}.`;
+    else if (pedido.estado === "entregado") ruta = `Ya se entregaron ${llevan} de ${pedido.nombre}.`;
+    else if (pedido.estado === "reembolsado") ruta = `Ese pedido se devolvió completo. No hay que salir.`;
+    else ruta = `${pedido.nombre}: el pago no cuadra, así que no sale.`;
+    if (pedido.verificado && pedido.estado !== "entregado" && pedido.estado !== "reembolsado") {
+      dineroAntes = `Ya entraron ${dinero(pedido.usdc)}. Sale con el dinero en la cuenta.`;
+    } else if (pedido.estado === "entregado") {
+      dineroAntes = `Cobró ${dinero(pedido.usdc)} antes de entregar. El pedido ya llegó.`;
+    }
+  }
+  return [
+    ["Pago automático", pago],
+    ["Cuánto y cuándo", ruta],
+    ["Dinero por adelantado", dineroAntes],
+  ];
+}
+
 function pintarGuia(estado) {
   const g = guion(estado);
-  const guia = $("#guia");
-  guia.replaceChildren();
+  const party = $("#guia-party");
+  const sistema = $("#guia-sistema");
+  party.replaceChildren();
+  sistema.replaceChildren();
+  const guia = g.panel === "party" ? party : sistema;
+  guia.className = "guia";
   const puntos = document.createElement("div");
   puntos.className = "puntos";
   for (let i = 1; i <= g.total; i += 1) {
@@ -179,11 +224,8 @@ function pintarGuia(estado) {
     if (g.id) b.dataset.id = g.id;
     guia.append(b);
   }
-  document.querySelectorAll(".panel").forEach((panel) => {
-    const foco = g.panel && panel.classList.contains(g.panel);
-    panel.classList.toggle("en-foco", Boolean(foco));
-    panel.classList.toggle("apagado", Boolean(g.panel) && !foco);
-  });
+  $("#lado-party").classList.toggle("en-foco", g.panel === "party");
+  $("#lado-sistema").classList.toggle("en-foco", g.panel === "sistema");
 }
 
 function pintar(estado) {
@@ -201,11 +243,11 @@ function pintar(estado) {
   resultado.textContent = ultimo || "";
 
   const agente = $("#saldo-agente");
-  agente.replaceChildren(caja("Dinero del agente para pagar", estado.saldos.agente ? dinero(estado.saldos.agente.usdc) : "sin billetera"));
+  agente.replaceChildren(caja("Presupuesto de la tienda", estado.saldos.agente ? dinero(estado.saldos.agente.usdc) : "sin billetera"));
   if (estado.cuentas.agenteUrl) agente.append(enlace(estado.cuentas.agenteUrl, "Ver la billetera del agente"));
 
   const proveedorSaldo = $("#saldo-proveedor");
-  proveedorSaldo.replaceChildren(caja("Dinero que ya recibió", estado.saldos.proveedor ? dinero(estado.saldos.proveedor.usdc) : "sin billetera"));
+  proveedorSaldo.replaceChildren(caja("Ya cobrado, antes de salir", estado.saldos.proveedor ? dinero(estado.saldos.proveedor.usdc) : "sin billetera"));
   if (estado.cuentas.proveedorUrl) proveedorSaldo.append(enlace(estado.cuentas.proveedorUrl, "Ver la billetera del proveedor"));
 
   const limites = $("#limites");
@@ -219,8 +261,11 @@ function pintar(estado) {
   const bajo = estado.productos.some((p) => p.stock <= p.minimo);
   const hayPedidoAbierto = estado.pedidos.some((p) => p.verificado && (p.estado === "pagado" || p.estado === "alistando"));
   const rondaLista = estado.pedidos.some((p) => p.estado === "entregado") && !bajo && !hayPedidoAbierto;
-  $("#revisar").classList.toggle("recomendado", estado.listo && bajo && !hayPedidoAbierto);
   $("#reiniciar").classList.toggle("recomendado", rondaLista);
+
+  const promesas = $("#promesas");
+  promesas.replaceChildren();
+  for (const [titulo, texto] of textosPromesa(estado)) promesas.append(promesa(titulo, texto));
 
   const productos = $("#productos");
   productos.replaceChildren();
@@ -237,9 +282,9 @@ function pintar(estado) {
     const meta = document.createElement("p");
     meta.className = "meta";
     const izq = document.createElement("span");
-    izq.textContent = `El cliente paga ${p.rojosPorUnidad} ROJOS`;
+    izq.textContent = `${p.rojosPorUnidad} ROJOS`;
     const der = document.createElement("span");
-    der.textContent = `Reponer: ${dinero(p.precioUsdc)} c/u`;
+    der.textContent = p.stock <= p.minimo ? "Hay que reponer" : "Alcanza";
     meta.append(izq, der);
     const barra = document.createElement("div");
     barra.className = p.stock <= p.minimo ? "barra bajo" : "barra";
@@ -248,6 +293,20 @@ function pintar(estado) {
     barra.append(span);
     card.append(h, situacion, meta, barra);
     productos.append(card);
+  }
+
+  const ventas = $("#ventas-phone");
+  ventas.replaceChildren();
+  const recientes = estado.bitacora.filter((b) => b.tipo === "venta").slice(0, 3);
+  if (!recientes.length) {
+    const vacio = document.createElement("p");
+    vacio.textContent = "Todavía nadie pide en el celular.";
+    ventas.append(vacio);
+  }
+  for (const linea of recientes) {
+    const p = document.createElement("p");
+    p.textContent = linea.mensaje.replace(/^Party Pay: /, "");
+    ventas.append(p);
   }
 
   const pedidos = $("#pedidos");

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Proveedores 402 · reposición del bar</title>
+    <title>Party Pay y la reposición del distribuidor</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23e23d2b'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,91 +13,77 @@
   <body>
     <header class="top">
       <div>
-        <p class="marca">Bar La Ruta · feria nocturna</p>
-        <h1>El bar se queda sin cerveza y pide solo</h1>
-        <p class="lede">Los clientes pagan en la feria. Si falta producto, el bar le paga al proveedor en el momento y nunca gasta más de su presupuesto.</p>
+        <p class="marca">Party Pay sigue. Esto es lo que le faltaba al distribuidor.</p>
+        <h1>La venta ya funciona. Ahora la tienda paga sola cuando hay que reponer.</h1>
       </div>
       <button id="reiniciar" type="button" class="ghost">Empezar la demo de nuevo</button>
     </header>
 
-    <ol class="historia">
-      <li>
-        <span>1</span>
-        <div>
-          <strong>El cliente pide</strong>
-          <p>Paga ROJOS en el celular. El stock del bar baja.</p>
-        </div>
-      </li>
-      <li>
-        <span>2</span>
-        <div>
-          <strong>El agente paga</strong>
-          <p>Pide lo que falta y manda USDC. Si el monto se pasa del límite, no paga.</p>
-        </div>
-      </li>
-      <li>
-        <span>3</span>
-        <div>
-          <strong>El proveedor entrega</strong>
-          <p>Ve el pago, empaca y, si falta producto, devuelve una parte.</p>
-        </div>
-      </li>
-    </ol>
-
     <section id="aviso" class="aviso" hidden></section>
-    <section id="guia" class="guia"></section>
     <section id="resultado" class="resultado" hidden></section>
 
-    <main>
-      <section class="panel party">
-        <header>
-          <p class="kicker">1 · El bar, en Party Pay</p>
-          <h2 id="tienda">Bar La Ruta</h2>
-          <p class="sub" id="evento">Aquí se vende. ROJOS es la moneda del cliente y se queda en la feria.</p>
+    <div class="escenario">
+      <section class="lado party" id="lado-party">
+        <header class="lado-head">
+          <p class="kicker">A la izquierda · lo que ya existe</p>
+          <h2>Party Pay</h2>
+          <p class="sub">El cliente pide desde el celular y paga en ROJOS. El bar ve cuánto le queda. Esta parte ya está en marcha.</p>
         </header>
-        <p class="rojos">Clientes pagaron esta noche: <strong id="rojos">0</strong> ROJOS</p>
-        <div id="productos"></div>
+        <div id="guia-party"></div>
+        <div class="telefono" aria-label="Simulación de Party Pay">
+          <div class="telefono-top">
+            <span>Party Pay</span>
+            <span id="evento">Feria nocturna</span>
+          </div>
+          <p class="telefono-lugar"><strong id="tienda">Bar La Ruta</strong></p>
+          <p class="telefono-nota">Inventario que ve el bar</p>
+          <div id="productos"></div>
+          <div class="telefono-pie">
+            <span>Cobrado esta noche</span>
+            <strong><b id="rojos">0</b> ROJOS</strong>
+          </div>
+          <div id="ventas-phone" class="ventas-phone"></div>
+        </div>
       </section>
 
-      <section class="panel agente">
-        <header>
-          <p class="kicker">2 · El agente del bar</p>
-          <h2>Pide y paga solo</h2>
-          <p class="sub">USDC es lo que el bar le paga al proveedor. Hay un límite para que no gaste de más.</p>
+      <section class="lado sistema" id="lado-sistema">
+        <header class="lado-head">
+          <p class="kicker">A la derecha · este proyecto</p>
+          <h2>Reposición del distribuidor</h2>
+          <p class="sub">Cuando Party Pay baja del mínimo, la tienda le paga sola al distribuidor. Él cobra antes de salir y sabe cuánto llevar y cuándo.</p>
         </header>
-        <dl class="saldos" id="saldo-agente"></dl>
-        <div class="limites" id="limites"></div>
-        <div class="acciones">
-          <button id="revisar" type="button">Que el agente pida y pague</button>
+        <div id="guia-sistema"></div>
+        <div id="promesas" class="promesas"></div>
+        <div class="columnas-internas">
+          <div>
+            <h3>La tienda paga</h3>
+            <div id="saldo-agente" class="saldos"></div>
+            <div id="limites" class="limites"></div>
+          </div>
+          <div>
+            <h3 id="proveedor">Cervecería del Valle</h3>
+            <p class="sub chico">Lo que tiene que salir a entregar.</p>
+            <div id="saldo-proveedor" class="saldos"></div>
+            <div id="pedidos"></div>
+          </div>
         </div>
         <details class="pruebas">
-          <summary>Probar que se detiene (para la evaluación)</summary>
-          <p>Estas acciones no son el día normal del bar. Sirven para mostrar que el agente no paga si algo no cuadra.</p>
+          <summary>Otras pruebas, si las piden</summary>
+          <p>No son el recorrido de la demo. Muestran que la tienda no paga si el pedido no cuadra.</p>
           <div class="acciones">
-            <button id="forzar" type="button" class="peligro">Intentar un pedido de 40, más caro que el límite</button>
-            <button id="sin-saldo" type="button" class="ghost">Ver qué pasa si la billetera está en cero</button>
-            <button id="repetir" type="button" class="ghost">Intentar pagar otra vez el mismo pedido</button>
-            <button id="juzgar" type="button" class="ghost">Revisar el pago como si el monto fuera otro</button>
+            <button id="sin-saldo" type="button" class="ghost">Billetera en cero</button>
+            <button id="repetir" type="button" class="ghost">Pagar el mismo pedido otra vez</button>
+            <button id="juzgar" type="button" class="ghost">Revisar un monto que no es el real</button>
           </div>
         </details>
       </section>
+    </div>
 
-      <section class="panel proveedor">
-        <header>
-          <p class="kicker">3 · El proveedor</p>
-          <h2 id="proveedor">Cervecería del Valle</h2>
-          <p class="sub">Solo empaca si el pago ya se comprobó en Stellar. Si no puede llevar todo, devuelve una parte.</p>
-        </header>
-        <dl class="saldos" id="saldo-proveedor"></dl>
-        <div id="pedidos"></div>
-      </section>
-    </main>
-
-    <section class="bitacora">
-      <h2>Qué ha pasado</h2>
+    <details class="bitacora">
+      <summary>Detalle de lo que ha pasado</summary>
       <p class="sub" id="resumen"></p>
       <ol id="bitacora"></ol>
-    </section>
+    </details>
     <script src="/app.js" type="module"></script>
   </body>
 </html>
