@@ -43,7 +43,7 @@ button.ghost, a.ghost {
   color: var(--paper);
   border: 1px solid var(--line);
 }
-.top, main, .bitacora, .historia, .aviso, .ahora, .resultado { width: min(1180px, calc(100% - 2rem)); margin-inline: auto; }
+.top, main, .bitacora, .historia, .aviso, .guia, .resultado { width: min(1180px, calc(100% - 2rem)); margin-inline: auto; }
 .top {
   display: flex;
   justify-content: space-between;
@@ -89,14 +89,30 @@ button.ghost, a.ghost {
   font-weight: 650;
 }
 .historia p { margin: 0.2rem 0 0; color: var(--muted); }
-.ahora, .resultado {
-  border-radius: 16px;
-  padding: 0.95rem 1rem;
+.guia {
+  background: var(--paper);
+  color: #1a120e;
+  border-radius: 22px;
+  padding: 1.15rem 1.2rem 1.25rem;
   margin-bottom: 1rem;
 }
-.ahora { background: var(--amber); color: #2a1603; }
-.ahora strong { display: block; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
-.resultado { background: #24362f; border: 1px solid rgba(47, 158, 143, 0.45); }
+.guia .paso {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 650;
+}
+.guia h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 0.25rem 0 0.45rem; }
+.guia p { margin: 0 0 0.9rem; font-size: 1.05rem; max-width: 62ch; }
+.guia button { font-size: 1.15rem; padding: 0.95rem 1.2rem; }
+.puntos { display: flex; gap: 0.35rem; margin-bottom: 0.7rem; }
+.puntos i { width: 2rem; height: 0.35rem; border-radius: 99px; background: rgba(26, 18, 14, 0.18); display: block; }
+.puntos i.hecho { background: #1a120e; }
+.resultado { background: #24362f; border: 1px solid rgba(47, 158, 143, 0.45); border-radius: 16px; padding: 0.95rem 1rem; margin-bottom: 1rem; }
+.panel.apagado { opacity: 0.42; }
+.panel.en-foco { outline: 3px solid var(--amber); }
+.panel .acciones, .pruebas { display: none; }
 .limites { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; margin: 0.2rem 0 0.9rem; }
 .limites div { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 0.55rem 0.7rem; }
 .limites span { display: block; color: var(--muted); font-size: 0.75rem; }
@@ -138,7 +154,7 @@ main { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.95fr) 
 .barra span { display: block; height: 100%; background: var(--good); }
 .barra.bajo span { background: var(--red); }
 .meta { display: flex; justify-content: space-between; gap: 0.5rem; color: var(--muted); font-size: 0.86rem; }
-.acciones, .pedido .acciones { display: flex; flex-direction: column; gap: 0.45rem; }
+.panel .acciones, .pruebas { display: none; }
 .saldos { display: flex; flex-direction: column; gap: 0.5rem; margin: 0.8rem 0; }
 .saldos div, .limites div { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 0.55rem 0.7rem; }
 .saldos span, .limites span { display: block; color: var(--muted); font-size: 0.75rem; }

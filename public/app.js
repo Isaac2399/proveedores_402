@@ -73,31 +73,124 @@ function caja(titulo, valor) {
   return div;
 }
 
-function siguientePaso(estado) {
-  if (!estado.listo) {
-    return "Faltan las billeteras de prueba. En la carpeta del proyecto corre npm run preparar, reinicia la app y vuelve aquí.";
-  }
-  const bajo = estado.productos.find((p) => p.stock <= p.minimo);
-  const porEmpacar = estado.pedidos.find((p) => p.verificado && p.estado === "pagado");
+function despuesDe(estado, pedido, tipo, texto) {
+  if (!pedido) return false;
+  return estado.bitacora.some((b) => b.tipo === tipo && b.en > pedido.creado && b.mensaje.toLowerCase().includes(texto));
+}
+
+function guion(estado) {
+  const imperial = estado.productos.find((p) => p.sku === "imperial");
+  const abierto = estado.pedidos.find((p) => p.verificado && p.estado === "pagado");
   const empacando = estado.pedidos.find((p) => p.estado === "alistando");
-  if (empacando) return `Siguiente: confirma la entrega de ${empacando.nombre}. El stock del bar sube con lo que sí llegó.`;
-  if (porEmpacar) return `Siguiente: ${porEmpacar.nombre} ya está pagado. En el proveedor, empaca el pedido o devuelve lo que no puedas llevar.`;
-  if (bajo) return `Siguiente: ${bajo.nombre} quedó en ${bajo.stock} y el mínimo es ${bajo.minimo}. Pulsa «Que el agente pida y pague».`;
-  if (estado.pedidos.some((p) => p.estado === "entregado")) {
-    return "Esta ronda ya se entregó. Para verla otra vez, pulsa «Empezar la demo de nuevo» y vende Imperial hasta que baje de 24.";
+  const total = 6;
+  if (!estado.listo) {
+    return { n: 1, total, panel: null, titulo: "Falta preparar las billeteras", texto: "Sin billeteras de prueba el agente no puede pagar. En la carpeta del proyecto corre npm run preparar y vuelve a abrir la app.", boton: null };
   }
-  return "Siguiente: simula una venta. En Imperial, pulsa «Se vendieron 8» hasta que queden menos de 24.";
+  if (!abierto && !empacando && imperial.stock > imperial.minimo) {
+    return {
+      n: 1, total, panel: "party", paso: "vender", sku: "imperial", unidades: "8",
+      titulo: "Llegan clientes y piden cerveza",
+      texto: `En el bar quedan ${imperial.stock} Imperial. Con una ronda de pedidos ya no alcanza para la noche. Cada cerveza se cobra en ROJOS, la moneda de la feria.`,
+      boton: "Se vendieron 8 cervezas",
+    };
+  }
+  if (!abierto && !empacando) {
+    return {
+      n: 2, total, panel: "agente", paso: "revisar",
+      titulo: "El bar pide más, sin pasarse del presupuesto",
+      texto: `Quedan ${imperial.stock} Imperial y el mínimo es ${imperial.minimo}. El agente pide lo que falta para aguantar la noche, pero solo paga lo que cabe en ${estado.topes.pedido}.`,
+      boton: "El agente pide y paga",
+    };
+  }
+  if (abierto && !despuesDe(estado, abierto, "tope", "0.40")) {
+    return {
+      n: 3, total, panel: "agente", paso: "forzar",
+      titulo: "Si el pedido es muy grande, no paga",
+      texto: "El pedido de verdad ya se pagó. Ahora pedimos 40 cervezas a propósito. Eso cuesta más que el presupuesto, así que el agente se detiene y no manda dinero.",
+      boton: "Pedir 40 y ver que se detiene",
+    };
+  }
+  if (abierto && !despuesDe(estado, abierto, "tope", "reembolso")) {
+    return {
+      n: 4, total, panel: "proveedor", paso: "reembolso", id: abierto.id, unidades: String(abierto.unidades),
+      titulo: "No se puede devolver el pedido entero",
+      texto: "El proveedor quiere devolver todo el dinero. Eso se pasa del límite de devolución, así que el sistema no lo deja.",
+      boton: "Intentar devolver todo",
+    };
+  }
+  if (abierto && !abierto.reembolsoHash) {
+    return {
+      n: 5, total, panel: "proveedor", paso: "reembolso", id: abierto.id, unidades: "4",
+      titulo: "Devuelve solo lo que no cabe en el camión",
+      texto: "4 cervezas no van. Esa devolución sí cabe en el límite y el dinero regresa al bar.",
+      boton: "Devolver 4 cervezas",
+    };
+  }
+  if (abierto) {
+    return {
+      n: 6, total, panel: "proveedor", paso: "alistar", id: abierto.id,
+      titulo: "El proveedor empaca lo que sí va a llevar",
+      texto: "El pago ya está confirmado. El proveedor empaca las cervezas que no se devolvieron.",
+      boton: "Empacar el pedido",
+    };
+  }
+  if (empacando) {
+    return {
+      n: 6, total, panel: "proveedor", paso: "entregar", id: empacando.id,
+      titulo: "La cerveza llega al bar",
+      texto: "Al confirmar, el stock sube solo con lo que sí llegó. Lo devuelto no entra.",
+      boton: "Ya llegó al bar",
+    };
+  }
+  return {
+    n: 6, total, panel: null, paso: "reiniciar",
+    titulo: "Eso es el sistema",
+    texto: "El cliente compra, el bar pide solo cuando falta producto, paga sin pasarse del presupuesto y el proveedor entrega o devuelve. Listo para otra noche.",
+    boton: "Empezar otra noche",
+  };
+}
+
+function pintarGuia(estado) {
+  const g = guion(estado);
+  const guia = $("#guia");
+  guia.replaceChildren();
+  const puntos = document.createElement("div");
+  puntos.className = "puntos";
+  for (let i = 1; i <= g.total; i += 1) {
+    const marca = document.createElement("i");
+    if (i <= g.n) marca.className = "hecho";
+    puntos.append(marca);
+  }
+  const paso = document.createElement("p");
+  paso.className = "paso";
+  paso.textContent = `Paso ${g.n} de ${g.total}`;
+  const titulo = document.createElement("h2");
+  titulo.textContent = g.titulo;
+  const texto = document.createElement("p");
+  texto.textContent = g.texto;
+  guia.append(puntos, paso, titulo, texto);
+  if (g.boton) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = g.boton;
+    b.dataset.paso = g.paso;
+    if (g.sku) b.dataset.sku = g.sku;
+    if (g.unidades) b.dataset.unidades = g.unidades;
+    if (g.id) b.dataset.id = g.id;
+    guia.append(b);
+  }
+  document.querySelectorAll(".panel").forEach((panel) => {
+    const foco = g.panel && panel.classList.contains(g.panel);
+    panel.classList.toggle("en-foco", Boolean(foco));
+    panel.classList.toggle("apagado", Boolean(g.panel) && !foco);
+  });
 }
 
 function pintar(estado) {
   $("#tienda").textContent = estado.tienda;
   $("#proveedor").textContent = estado.proveedor;
   $("#rojos").textContent = String(estado.rojosCobrados);
-  const ahora = $("#ahora");
-  ahora.replaceChildren();
-  const etiqueta = document.createElement("strong");
-  etiqueta.textContent = "Qué hacer ahora";
-  ahora.append(etiqueta, document.createTextNode(` ${siguientePaso(estado)}`));
+  pintarGuia(estado);
 
   const aviso = $("#aviso");
   aviso.hidden = estado.listo;
@@ -132,7 +225,6 @@ function pintar(estado) {
   const productos = $("#productos");
   productos.replaceChildren();
   for (const p of estado.productos) {
-    const unidades = p.sku === "papas" ? 4 : 8;
     const card = document.createElement("article");
     card.className = "producto";
     const h = document.createElement("h3");
@@ -154,12 +246,7 @@ function pintar(estado) {
     const span = document.createElement("span");
     span.style.width = `${Math.min(100, (p.stock / (p.minimo * 2)) * 100)}%`;
     barra.append(span);
-    const vender = boton(`Se vendieron ${unidades}`, !rondaLista && p.stock > p.minimo && p.sku === "imperial" && !hayPedidoAbierto ? "recomendado" : "", {
-      accion: "vender",
-      sku: p.sku,
-      unidades: String(unidades),
-    });
-    card.append(h, situacion, meta, barra, vender);
+    card.append(h, situacion, meta, barra);
     productos.append(card);
   }
 
@@ -252,24 +339,25 @@ document.body.addEventListener("click", async (event) => {
   ocupado(btn, true);
   try {
     let data = {};
-    if (btn.id === "revisar") data = await post("/api/agente/revisar");
-    else if (btn.id === "forzar") data = await post("/api/agente/forzar", { sku: "imperial", unidades: 40 });
-    else if (btn.id === "sin-saldo") data = await post("/api/agente/sin-saldo", { sku: "imperial", unidades: 12 });
-    else if (btn.id === "repetir") data = await post("/api/agente/repetir");
-    else if (btn.id === "juzgar") data = await post("/api/pagos/juzgar", { monto: "9.99" });
-    else if (btn.id === "reiniciar") data = await post("/api/demo/reiniciar");
-    else if (btn.dataset.accion === "vender") {
+    const paso = btn.dataset.paso || btn.id;
+    if (paso === "revisar") data = await post("/api/agente/revisar");
+    else if (paso === "forzar") data = await post("/api/agente/forzar", { sku: "imperial", unidades: 40 });
+    else if (paso === "sin-saldo") data = await post("/api/agente/sin-saldo", { sku: "imperial", unidades: 12 });
+    else if (paso === "repetir") data = await post("/api/agente/repetir");
+    else if (paso === "juzgar") data = await post("/api/pagos/juzgar", { monto: "9.99" });
+    else if (paso === "reiniciar") data = await post("/api/demo/reiniciar");
+    else if (paso === "vender" || btn.dataset.accion === "vender") {
       data = await post("/api/ventas", { sku: btn.dataset.sku, unidades: Number(btn.dataset.unidades) });
       if (data.ok) data.mensaje = `Se vendieron ${btn.dataset.unidades} ${data.item.nombre}. El bar cobró ${data.rojos} ROJOS y quedan ${data.estado}.`;
     }
-    else if (btn.dataset.accion === "alistar") {
+    else if (paso === "alistar" || btn.dataset.accion === "alistar") {
       data = await post(`/api/pedidos/${btn.dataset.id}/alistar`);
-      if (data.ok && !data.mensaje) data.mensaje = "El proveedor está empacando el pedido.";
-    } else if (btn.dataset.accion === "entregar") {
+      if (data.ok && !data.mensaje) data.mensaje = "El proveedor está empacando lo que sí va a llevar.";
+    } else if (paso === "entregar" || btn.dataset.accion === "entregar") {
       data = await post(`/api/pedidos/${btn.dataset.id}/entregar`);
-      if (data.ok && !data.mensaje) data.mensaje = "Entrega confirmada. Lo que sí llegó ya está en el stock del bar.";
+      if (data.ok && !data.mensaje) data.mensaje = "Ya llegó al bar. El stock subió solo con lo que no se devolvió.";
     }
-    else if (btn.dataset.accion === "reembolso") data = await post(`/api/pedidos/${btn.dataset.id}/reembolsar`, { unidades: Number(btn.dataset.unidades) });
+    else if (paso === "reembolso" || btn.dataset.accion === "reembolso") data = await post(`/api/pedidos/${btn.dataset.id}/reembolsar`, { unidades: Number(btn.dataset.unidades) });
     ultimo = data.mensaje || (data.ok ? "Listo." : "No se pudo completar.");
   } finally {
     ocupado(btn, false);
