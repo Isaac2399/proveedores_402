@@ -62,7 +62,7 @@ function portada() {
     <svg viewBox="0 0 420 360">
       ${telefono}
       <rect x="44" y="118" width="136" height="36" rx="8" fill="#f3e6d8"/>
-      <text x="56" y="141" font-size="13" fill="#1a120e">Imperial · USDC</text>
+      <text x="56" y="141" font-size="13" fill="#1a120e">Cerveza · USDC</text>
       <path d="M196 150 C 240 90, 280 90, 300 180" fill="none" stroke="#cbbba6" stroke-width="2" stroke-dasharray="5 6"/>
       <g class="moneda-viaja">
         <circle r="18" fill="#ffb703"/>
@@ -89,7 +89,7 @@ function party() {
         <text x="20" y="48" font-size="15" font-weight="700" fill="#e23d2b">PARTY PAY</text>
         <g class="pedido-pop">
           <rect x="16" y="70" width="168" height="48" rx="10" fill="#f6efe2"/>
-          <text x="28" y="99" font-size="15" fill="#1a120e">8 Imperial</text>
+          <text x="28" y="99" font-size="15" fill="#1a120e">8 cervezas</text>
         </g>
         <g class="pedido-pop d2">
           <rect x="16" y="128" width="168" height="48" rx="10" fill="#f6efe2"/>
@@ -109,11 +109,11 @@ function party() {
 function problema() {
   return conEscena([
     el("p", "kicker", "El hueco"),
-    el("h1", "", "Se acaba la Imperial y alguien tiene que salir a buscarla."),
+    el("h1", "", "Se acaban las cervezas y alguien tiene que salir a buscarlas."),
     lista([
       "Hoy se llama, se fía y se paga después.",
       "El distribuidor no sabe cuánto llevar ni a qué hora.",
-      "Sale sin el dinero, o no sale y el bar pierde la venta.",
+      "Sale sin haber cobrado. Si no sale, el bar se queda sin cerveza.",
     ]),
   ], `
     <svg viewBox="0 0 420 380">
@@ -148,14 +148,14 @@ function solucion() {
       "De dinero: ¿cuánto USDC puede salir, sin pasarse?",
       "Si el pedido se pasa de producto o de plata, no se paga.",
     ]),
-    el("p", "nota", "Con esos dos números el agente conecta al bar con el proveedor. Paga solo, y nunca por encima."),
+    el("p", "nota", "Ese pedido puede ser del día, de la semana, de la quincena o del mes. Depende del producto."),
   ], `
     <svg viewBox="0 0 420 420">
       <g class="foco">
         <rect class="panel-luz" x="24" y="36" width="372" height="150" rx="16" fill="#221812"/>
         <text x="44" y="84" font-size="16" fill="#ffb703">Límite de producto</text>
         <text x="44" y="126" font-size="26" fill="#f6efe2">Pedir al llegar a 24</text>
-        <text x="44" y="158" font-size="16" fill="#cbbba6">Imperial en el bar</text>
+        <text x="44" y="158" font-size="16" fill="#cbbba6">cervezas del bar</text>
       </g>
       <g class="foco">
         <rect class="panel-luz" x="24" y="214" width="372" height="150" rx="16" fill="#221812"/>
@@ -169,22 +169,26 @@ function solucion() {
 function regla() {
   const s = el("section", "slide");
   s.append(
-    el("p", "kicker", "La cuenta, con Imperial"),
-    el("h1", "", "Hacen falta 16. Solo se pagan 12."),
-    el("p", "bajada", "Quedan 20 y el negocio pidió reponer al llegar a 24. Para dos noches harían falta 16. A 0.01 USDC cada una, eso son 0.16 USDC. El límite del pedido es 0.12, así que entran 12 y las otras 4 no se piden."),
+    el("p", "kicker", "La cuenta"),
+    el("h1", "corte", "Hacen falta 16. Se pagan 12."),
+    lista([
+      "Quedan 20. Se pide desde 24.",
+      "16 cervezas son 0.16 USDC.",
+      "El límite es 0.12. Entran 12.",
+    ]),
   );
   const nums = el("div", "numeros");
   for (const [valor, etiqueta] of [
-    ["0.12 USDC", "Un pedido. 12 Imperial. La número 13 ya no cabe."],
-    ["0.30 USDC", "Todo el día. Aunque pida varias veces, no pasa de aquí."],
-    ["0.08 USDC", "Una devolución. Puede regresar 8 Imperial, no las 12."],
+    ["0.12 USDC", "Un pedido. 12 cervezas."],
+    ["0.30 USDC", "Todo el día."],
+    ["0.08 USDC", "Una devolución. 8 cervezas."],
   ]) {
     const d = document.createElement("div");
     d.append(el("strong", "", valor), el("span", "", etiqueta));
     nums.append(d);
   }
   s.append(nums);
-  s.append(el("p", "nota", "0.01 USDC es el precio de práctica de una Imperial, para que el ejemplo quepa en la billetera. En el bar esa cerveza se vende a ₡700. El recorte es el mismo con el precio real: si no cabe en el límite, se piden menos unidades. Si el precio no es el esperado, si ese pedido ya se pagó o si no hay saldo, tampoco se firma."));
+  s.append(el("p", "nota", "En el bar, ₡700. En la demo, 0.01 USDC por cerveza."));
   return s;
 }
 
@@ -193,8 +197,8 @@ function recorrido() {
   s.append(el("p", "kicker", "En vivo, seis clics"), el("h1", "", "Primero el celular. Después el distribuidor."));
   const grid = el("ol", "pasos lista");
   const items = [
-    "En Party Pay se piden 8 Imperial. El stock baja de 28 a 20.",
-    "La tienda paga 12, no 16. 12 × 0.01 USDC = 0.12, que es el límite.",
+    "En Party Pay se piden 8 cervezas. El stock baja de 28 a 20.",
+    "La tienda paga 12, no 16. El límite es 0.12 USDC.",
     "Un pedido de 40 se detiene. No sale dinero.",
     "Devolver todo también se detiene. Devolver 4 sí.",
     "El distribuidor empaca solo lo que va a llevar.",
@@ -202,7 +206,6 @@ function recorrido() {
   ];
   items.forEach((item, i) => {
     const li = document.createElement("li");
-    li.className = "paso-vivo";
     li.append(el("span", "", String(i + 1).padStart(2, "0")), document.createTextNode(item));
     grid.append(li);
   });
