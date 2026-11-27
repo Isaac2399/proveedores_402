@@ -122,7 +122,7 @@ export function vender(sku, unidades) {
   estado.bitacora.unshift({
     en: new Date().toISOString(),
     tipo: "venta",
-    mensaje: `Party Pay: ${unidades} ${item.nombre}. La tienda cobró ${rojos} ROJOS. Quedan ${item.stock}.`,
+    mensaje: `Party Pay: ${unidades} ${item.nombre}. Quedan ${item.stock}.`,
   });
   estado.bitacora = estado.bitacora.slice(0, 40);
   guardar(estado);

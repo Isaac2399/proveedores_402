@@ -55,14 +55,14 @@ const telefono = `
 
 function portada() {
   return conEscena([
-    el("p", "kicker", "Demo day · Bar La Ruta"),
-    el("h1", "", "La venta ya funciona. Ahora la tienda paga sola."),
-    el("p", "bajada", "Party Pay es el celular del cliente. Este proyecto es el camión del distribuidor: cobra antes de salir y sabe qué cargar."),
+    el("p", "kicker", "Lo que vimos en clase"),
+    el("h1", "", "Un agente puede pagar. Solo hasta un límite."),
+    el("p", "bajada", "En clase vimos pagos agénticos con un tope. El agente paga solo. Si el monto se pasa, no firma."),
   ], `
     <svg viewBox="0 0 420 360">
       ${telefono}
       <rect x="44" y="118" width="136" height="36" rx="8" fill="#f3e6d8"/>
-      <text x="56" y="141" font-size="13" fill="#1a120e">Imperial · 2 ROJOS</text>
+      <text x="56" y="141" font-size="13" fill="#1a120e">Imperial · USDC</text>
       <path d="M196 150 C 240 90, 280 90, 300 180" fill="none" stroke="#cbbba6" stroke-width="2" stroke-dasharray="5 6"/>
       <g class="moneda-viaja">
         <circle r="18" fill="#ffb703"/>
@@ -74,14 +74,14 @@ function portada() {
 
 function party() {
   return conEscena([
-    el("p", "kicker", "Lo que ya existe"),
-    el("h1", "", "Party Pay ya resuelve la noche."),
+    el("p", "kicker", "El negocio que ya funciona"),
+    el("h1", "", "Eso lo conectamos con Party Pay."),
     lista([
-      "El cliente pide la cerveza desde el celular.",
-      "Paga en ROJOS, la moneda de la feria.",
-      "El bar ve, en el momento, cuánto le queda.",
+      "Party Pay ya opera en bares y en eventos masivos.",
+      "El cliente pide desde el celular y paga en USDC.",
+      "El sistema nuevo conecta ese negocio con sus proveedores.",
     ]),
-    el("p", "nota", "Esta parte ya está en marcha. Ya pasó por un hackathon. Lo que sigue es el otro lado del mostrador."),
+    el("p", "nota", "La venta ya está resuelta. Lo que falta es el pedido al distribuidor, con el mismo pago y con un límite."),
   ], `
     <svg viewBox="0 0 420 420">
       <g transform="translate(110 20)">
@@ -93,14 +93,14 @@ function party() {
         </g>
         <g class="pedido-pop d2">
           <rect x="16" y="128" width="168" height="48" rx="10" fill="#f6efe2"/>
-          <text x="28" y="157" font-size="15" fill="#1a120e">16 ROJOS</text>
+          <text x="28" y="157" font-size="15" fill="#1a120e">Pagado en USDC</text>
         </g>
         <text x="20" y="214" font-size="13" fill="#6d584c">Quedan</text>
         <rect x="20" y="226" width="160" height="14" rx="7" fill="#eadfd4"/>
         <rect class="nivel" x="20" y="226" width="160" height="14" rx="7" fill="#e23d2b"/>
         <g class="moneda-quieta">
           <circle cx="100" cy="300" r="36" fill="#e23d2b"/>
-          <text x="100" y="306" text-anchor="middle" font-size="14" font-weight="700" fill="#fff8f2">ROJOS</text>
+          <text x="100" y="306" text-anchor="middle" font-size="14" font-weight="700" fill="#fff8f2">USDC</text>
         </g>
       </g>
     </svg>`);
@@ -141,86 +141,50 @@ function problema() {
 
 function solucion() {
   return conEscena([
-    el("p", "kicker", "La continuación"),
-    el("h1", "", "Cuando falta producto, la tienda paga sola."),
+    el("p", "kicker", "El sistema nuevo"),
+    el("h1", "", "Primero le preguntamos al negocio sus límites."),
     lista([
-      "Pago automático. Nadie arma el pedido a mano.",
-      "Cuánto y cuándo. El distribuidor ve las unidades que salen.",
-      "Dinero por adelantado. Cobra antes de cargar el camión.",
+      "De producto: ¿desde cuántas unidades hay que hacer el próximo pedido?",
+      "De dinero: ¿cuánto USDC puede salir, sin pasarse?",
+      "Si el pedido se pasa de producto o de plata, no se paga.",
     ]),
+    el("p", "nota", "Con esos dos números el agente conecta al bar con el proveedor. Paga solo, y nunca por encima."),
   ], `
     <svg viewBox="0 0 420 420">
       <g class="foco">
-        <rect class="panel-luz" x="24" y="24" width="372" height="100" rx="16" fill="#221812"/>
-        <text x="44" y="64" font-size="15" fill="#ffb703">1 · Paga sola</text>
-        <text x="44" y="96" font-size="22" fill="#f6efe2">0.12 USDC, sin llamar</text>
+        <rect class="panel-luz" x="24" y="36" width="372" height="150" rx="16" fill="#221812"/>
+        <text x="44" y="84" font-size="16" fill="#ffb703">Límite de producto</text>
+        <text x="44" y="126" font-size="26" fill="#f6efe2">Pedir al llegar a 24</text>
+        <text x="44" y="158" font-size="16" fill="#cbbba6">Imperial en el bar</text>
       </g>
       <g class="foco">
-        <rect class="panel-luz" x="24" y="144" width="372" height="100" rx="16" fill="#221812"/>
-        <text x="44" y="184" font-size="15" fill="#ffb703">2 · Cuánto y cuándo</text>
-        <text x="44" y="216" font-size="22" fill="#f6efe2">Llevar 12. Salir ya.</text>
-      </g>
-      <g class="foco">
-        <rect class="panel-luz" x="24" y="264" width="372" height="100" rx="16" fill="#221812"/>
-        <text x="44" y="304" font-size="15" fill="#ffb703">3 · Dinero primero</text>
-        <text x="44" y="336" font-size="22" fill="#f6efe2">Cobra y después carga</text>
+        <rect class="panel-luz" x="24" y="214" width="372" height="150" rx="16" fill="#221812"/>
+        <text x="44" y="262" font-size="16" fill="#ffb703">Límite de dinero</text>
+        <text x="44" y="304" font-size="26" fill="#f6efe2">0.12 USDC</text>
+        <text x="44" y="336" font-size="16" fill="#cbbba6">y no un centavo más</text>
       </g>
     </svg>`);
 }
 
-function monedas() {
-  const s = el("section", "slide");
-  s.append(el("p", "kicker", "Dos monedas, dos trabajos"), el("h1", "", "No se mezclan."));
-  const grid = el("div", "dos");
-  const izq = el("article", "lado party");
-  izq.append(
-    el("p", "kicker", "En la feria"),
-    el("h2", "", "ROJOS"),
-    el("p", "", "El cliente le paga al bar. Ese dinero se queda en Party Pay. No sale hacia el distribuidor."),
-    escena(`<svg viewBox="0 0 220 120"><g class="moneda-quieta"><circle cx="110" cy="58" r="36" fill="#e23d2b"/><text x="110" y="64" text-anchor="middle" font-size="14" font-weight="700" fill="#fff8f2">ROJOS</text></g></svg>`),
-  );
-  const der = el("article", "lado usdc");
-  der.append(
-    el("p", "kicker", "Con el distribuidor"),
-    el("h2", "", "USDC"),
-    el("p", "", "La tienda liquida el pedido en Stellar. El distribuidor lo ve en su cuenta antes de empacar."),
-    escena(`<svg viewBox="0 0 220 120"><g class="moneda-entra"><circle cx="110" cy="58" r="36" fill="#ffb703"/><text x="110" y="64" text-anchor="middle" font-size="16" font-weight="700" fill="#1a120e">USDC</text></g></svg>`),
-  );
-  grid.append(izq, der);
-  s.append(grid);
-  return s;
-}
-
 function regla() {
-  const s = el("section", "slide con-escena");
-  const texto = el("div", "texto");
-  texto.append(
-    el("p", "kicker", "El control"),
-    el("h1", "", "Paga lo que falta. Nunca más que el presupuesto."),
-    el("p", "bajada", "Mira el inventario, calcula dos noches y recorta. Si el precio no cuadra, si el pedido ya se pagó o si no hay saldo, no firma."),
+  const s = el("section", "slide");
+  s.append(
+    el("p", "kicker", "La cuenta, con Imperial"),
+    el("h1", "", "Hacen falta 16. Solo se pagan 12."),
+    el("p", "bajada", "Quedan 20 y el negocio pidió reponer al llegar a 24. Para dos noches harían falta 16. A 0.01 USDC cada una, eso son 0.16 USDC. El límite del pedido es 0.12, así que entran 12 y las otras 4 no se piden."),
   );
   const nums = el("div", "numeros");
   for (const [valor, etiqueta] of [
-    ["0.12", "Máximo por pedido"],
-    ["0.30", "Máximo del día"],
-    ["0.08", "Máximo a devolver"],
+    ["0.12 USDC", "Un pedido. 12 Imperial. La número 13 ya no cabe."],
+    ["0.30 USDC", "Todo el día. Aunque pida varias veces, no pasa de aquí."],
+    ["0.08 USDC", "Una devolución. Puede regresar 8 Imperial, no las 12."],
   ]) {
     const d = document.createElement("div");
-    d.append(el("strong", "", valor), el("span", "", `${etiqueta} · USDC de prueba`));
+    d.append(el("strong", "", valor), el("span", "", etiqueta));
     nums.append(d);
   }
-  texto.append(nums);
-  texto.append(el("p", "nota", "En la demo cada Imperial se liquida a 0.01 USDC para que quepa en una billetera de prueba. En el bar esa cerveza vale ₡700."));
-  s.append(texto, escena(`
-    <svg viewBox="0 0 420 320">
-      <text x="24" y="48" font-size="16" fill="#cbbba6">Pedido que se quiere</text>
-      <rect x="24" y="68" width="340" height="36" rx="18" fill="#3a2c24"/>
-      <rect class="lleno" x="24" y="68" width="340" height="36" rx="18" fill="#ffb703"/>
-      <line x1="187" y1="40" x2="187" y2="104" stroke="#f6efe2" stroke-width="3"/>
-      <text x="196" y="36" font-size="14" fill="#f6efe2">tope</text>
-      <text x="24" y="180" font-size="28" fill="#f6efe2">Se estira… y vuelve al límite.</text>
-      <text x="24" y="230" font-size="18" fill="#cbbba6">Lo que se pasa no se firma.</text>
-    </svg>`));
+  s.append(nums);
+  s.append(el("p", "nota", "0.01 USDC es el precio de práctica de una Imperial, para que el ejemplo quepa en la billetera. En el bar esa cerveza se vende a ₡700. El recorte es el mismo con el precio real: si no cabe en el límite, se piden menos unidades. Si el precio no es el esperado, si ese pedido ya se pagó o si no hay saldo, tampoco se firma."));
   return s;
 }
 
@@ -230,7 +194,7 @@ function recorrido() {
   const grid = el("ol", "pasos lista");
   const items = [
     "En Party Pay se piden 8 Imperial. El stock baja de 28 a 20.",
-    "La tienda paga 12, no 16. 0.12 USDC es el tope.",
+    "La tienda paga 12, no 16. 12 × 0.01 USDC = 0.12, que es el límite.",
     "Un pedido de 40 se detiene. No sale dinero.",
     "Devolver todo también se detiene. Devolver 4 sí.",
     "El distribuidor empaca solo lo que va a llevar.",
@@ -275,7 +239,7 @@ function cierre() {
   return s;
 }
 
-const slides = [portada(), party(), problema(), solucion(), monedas(), regla(), recorrido(), cierre()];
+const slides = [portada(), party(), problema(), solucion(), regla(), recorrido(), cierre()];
 slides.forEach((s) => deck.append(s));
 
 let actual = 0;

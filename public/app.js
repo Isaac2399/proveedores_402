@@ -90,7 +90,7 @@ function guion(estado) {
     return {
       n: 1, total, panel: "party", paso: "vender", sku: "imperial", unidades: "8",
       titulo: "En Party Pay, un cliente pide",
-      texto: `A la izquierda, en el celular. Quedan ${imperial.stock} Imperial. Ocho pedidos más y el bar se queda corto. El cliente paga en ROJOS.`,
+      texto: `A la izquierda, en el celular. Quedan ${imperial.stock} Imperial. Ocho pedidos más y el bar se queda corto. El cliente paga en USDC.`,
       boton: "Pedir 8 Imperial en Party Pay",
     };
   }
@@ -231,7 +231,7 @@ function pintarGuia(estado) {
 function pintar(estado) {
   $("#tienda").textContent = estado.tienda;
   $("#proveedor").textContent = estado.proveedor;
-  $("#rojos").textContent = String(estado.rojosCobrados);
+  $("#rojos").textContent = String(estado.ventas);
   pintarGuia(estado);
 
   const aviso = $("#aviso");
@@ -282,7 +282,7 @@ function pintar(estado) {
     const meta = document.createElement("p");
     meta.className = "meta";
     const izq = document.createElement("span");
-    izq.textContent = `${p.rojosPorUnidad} ROJOS`;
+    izq.textContent = "USDC";
     const der = document.createElement("span");
     der.textContent = p.stock <= p.minimo ? "Hay que reponer" : "Alcanza";
     meta.append(izq, der);
@@ -369,7 +369,7 @@ function pintar(estado) {
   }
 
   const frases = [];
-  if (estado.ventas) frases.push(`Ventas de esta noche: ${estado.rojosCobrados} ROJOS.`);
+  if (estado.ventas) frases.push(`Ventas de esta noche: ${estado.ventas}.`);
   const bajos = estado.productos.filter((p) => p.stock <= p.minimo).map((p) => p.nombre);
   if (bajos.length) frases.push(`Bajo el mínimo ahora: ${bajos.join(", ")}.`);
   for (const p of estado.pedidos) {
@@ -407,7 +407,7 @@ document.body.addEventListener("click", async (event) => {
     else if (paso === "reiniciar") data = await post("/api/demo/reiniciar");
     else if (paso === "vender" || btn.dataset.accion === "vender") {
       data = await post("/api/ventas", { sku: btn.dataset.sku, unidades: Number(btn.dataset.unidades) });
-      if (data.ok) data.mensaje = `Se vendieron ${btn.dataset.unidades} ${data.item.nombre}. El bar cobró ${data.rojos} ROJOS y quedan ${data.estado}.`;
+      if (data.ok) data.mensaje = `Se vendieron ${btn.dataset.unidades} ${data.item.nombre}. Quedan ${data.estado}.`;
     }
     else if (paso === "alistar" || btn.dataset.accion === "alistar") {
       data = await post(`/api/pedidos/${btn.dataset.id}/alistar`);
