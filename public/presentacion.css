@@ -24,6 +24,124 @@ button, a { font: inherit; }
   padding: clamp(1.4rem, 4vh, 3.2rem) clamp(1.2rem, 5vw, 4.5rem) 1rem;
 }
 .slide.activa { display: flex; flex-direction: column; justify-content: center; }
+.con-escena.activa {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(240px, 0.85fr);
+  align-items: center;
+  column-gap: clamp(1rem, 3vw, 2.4rem);
+}
+.con-escena h1 { font-size: clamp(2.1rem, 4.4vw, 3.8rem); }
+.escena { height: min(64vh, 520px); min-height: 240px; overflow: hidden; }
+.lado .escena { height: 120px; min-height: 0; }
+.escena svg { width: 100%; height: 100%; display: block; }
+.escena text { font-family: Outfit, sans-serif; }
+.slide.activa h1,
+.slide.activa .bajada,
+.slide.activa .lista:not(.pasos) li,
+.slide.activa .nota,
+.slide.activa .numeros div,
+.slide.activa .lado {
+  animation: subir 0.55s both;
+}
+.slide.activa .lista:not(.pasos) li:nth-child(2),
+.slide.activa .numeros div:nth-child(2) { animation-delay: 0.08s; }
+.slide.activa .lista:not(.pasos) li:nth-child(3),
+.slide.activa .numeros div:nth-child(3) { animation-delay: 0.16s; }
+.slide.activa .lista:not(.pasos) li:nth-child(4) { animation-delay: 0.24s; }
+.slide.activa .lista:not(.pasos) li:nth-child(5) { animation-delay: 0.32s; }
+.slide.activa .lista:not(.pasos) li:nth-child(6) { animation-delay: 0.4s; }
+@keyframes subir {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.rueda { transform-box: fill-box; transform-origin: center; animation: girar 0.8s linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+.moneda-viaja { animation: cruzar 3.8s ease-in-out infinite; }
+@keyframes cruzar {
+  0% { transform: translate(78px, 168px); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translate(292px, 188px); opacity: 0; }
+}
+.camion { animation: balanceo 2.4s ease-in-out infinite; }
+@keyframes balanceo {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.nivel { transform-box: fill-box; transform-origin: left center; animation: merma 3.4s ease-in-out infinite; }
+@keyframes merma {
+  0%, 18% { transform: scaleX(1); }
+  62%, 100% { transform: scaleX(0.42); }
+}
+.pedido-pop { animation: pop 3.4s ease-in-out infinite; opacity: 0; }
+.pedido-pop.d2 { animation-delay: 0.35s; }
+.pedido-pop.d3 { animation-delay: 0.7s; }
+@keyframes pop {
+  0%, 8% { opacity: 0; transform: translateY(8px); }
+  22%, 80% { opacity: 1; transform: none; }
+  100% { opacity: 1; }
+}
+.onda { transform-box: fill-box; transform-origin: center; animation: sonar 1.6s ease-out infinite; }
+.onda.tardia { animation-delay: 0.45s; }
+@keyframes sonar {
+  from { transform: scale(0.55); opacity: 0.7; }
+  to { transform: scale(1.7); opacity: 0; }
+}
+.botella-falta { animation: parpadeo 1.8s steps(2, end) infinite; }
+@keyframes parpadeo { 50% { opacity: 0.25; } }
+.panel-luz { animation: luz 7.2s linear infinite; }
+.foco:nth-child(2) .panel-luz { animation-delay: 2.4s; }
+.foco:nth-child(3) .panel-luz { animation-delay: 4.8s; }
+@keyframes luz {
+  0%, 26% { fill: #4a3514; }
+  34%, 100% { fill: #221812; }
+}
+.lleno { transform-box: fill-box; transform-origin: left center; animation: recorte 4.2s ease-in-out infinite; }
+@keyframes recorte {
+  0% { transform: scaleX(0.15); }
+  42%, 58% { transform: scaleX(1); }
+  78%, 100% { transform: scaleX(0.48); }
+}
+.moneda-quieta { animation: flotar 2.2s ease-in-out infinite; }
+@keyframes flotar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.moneda-entra { animation: entrar-moneda 3.2s ease-in-out infinite; }
+@keyframes entrar-moneda {
+  0% { transform: translateX(-36px); opacity: 0; }
+  25%, 80% { transform: none; opacity: 1; }
+  100% { opacity: 1; }
+}
+.paso-vivo { animation: paso-vivo 12s linear infinite; border-radius: 10px; }
+.pasos li:nth-child(2) { animation-delay: 2s; }
+.pasos li:nth-child(3) { animation-delay: 4s; }
+.pasos li:nth-child(4) { animation-delay: 6s; }
+.pasos li:nth-child(5) { animation-delay: 8s; }
+.pasos li:nth-child(6) { animation-delay: 10s; }
+@keyframes paso-vivo {
+  0%, 14% { background: rgba(255, 183, 3, 0.16); }
+  18%, 100% { background: transparent; }
+}
+.sale { animation: salir 4.5s ease-in-out infinite; }
+@keyframes salir {
+  0%, 30% { transform: translateX(0); }
+  70%, 100% { transform: translateX(46px); }
+}
+.check { transform-box: fill-box; transform-origin: center; animation: aparece 4.5s ease-in-out infinite; }
+@keyframes aparece {
+  0%, 18% { opacity: 0; transform: scale(0.6); }
+  32%, 100% { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rueda, .moneda-viaja, .camion, .nivel, .pedido-pop, .onda, .botella-falta,
+  .panel-luz, .lleno, .moneda-quieta, .moneda-entra, .paso-vivo, .sale, .check,
+  .slide.activa h1, .slide.activa .bajada, .slide.activa .lista:not(.pasos) li,
+  .slide.activa .nota, .slide.activa .numeros div, .slide.activa .lado {
+    animation: none;
+  }
+  .pedido-pop, .check { opacity: 1; }
+}
 .kicker {
   margin: 0 0 0.6rem;
   letter-spacing: 0.14em;
@@ -154,9 +272,14 @@ h1 {
 @media (max-width: 800px) {
   body { overflow-x: hidden; overflow-y: auto; }
   #deck { height: auto; min-height: calc(100svh - 3.4rem); }
-  .slide, .slide.activa { min-height: calc(100svh - 3.4rem); overflow-x: hidden; }
+  .slide.activa, .con-escena.activa {
+    display: flex;
+    min-height: calc(100svh - 3.4rem);
+    overflow-x: hidden;
+  }
+  .escena { height: 220px; min-height: 0; order: -1; }
   .dos, .numeros, .pasos { grid-template-columns: 1fr; }
-  h1 { font-size: 2.3rem; }
+  h1, .con-escena h1 { font-size: 2.1rem; }
   .puntos { display: none; }
   .barra { padding-inline: 0.7rem; }
 }
