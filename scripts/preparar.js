@@ -5,7 +5,7 @@ import { HORIZON, ROJOS, USDC, enlaceCuenta, enlaceTx } from "../red.js";
 const horizon = new Horizon.Server(HORIZON);
 const usdc = new Asset(USDC.code, USDC.issuer);
 const rojos = new Asset(ROJOS.code, ROJOS.issuer);
-const PRESUPUESTO_AGENTE = "0.40";
+const PRESUPUESTO_AGENTE = "1.50";
 
 function leerEnv(ruta) {
   if (!existsSync(ruta)) return {};
@@ -101,7 +101,7 @@ if (!actual.AGENTE_SECRETA) await activar(agente);
 
 const trustProveedor = await trustlines(proveedor);
 const trustAgente = await trustlines(agente);
-const compra = await conseguirUsdc(proveedor, "2");
+const compra = await conseguirUsdc(proveedor, "3");
 const presupuesto = await enviarUsdc(proveedor, agente, PRESUPUESTO_AGENTE);
 
 escribirEnv({
@@ -117,5 +117,5 @@ console.log(`Proveedor: ${enlaceCuenta(proveedor.publicKey())}`);
 console.log(`Agente de la tienda: ${enlaceCuenta(agente.publicKey())}`);
 if (trustProveedor) console.log(`Trustline USDC y ROJOS del proveedor: ${enlaceTx(trustProveedor)}`);
 if (trustAgente) console.log(`Trustline USDC y ROJOS del agente: ${enlaceTx(trustAgente)}`);
-console.log(`Compra de 2 USDC: ${enlaceTx(compra)}`);
+console.log(`Compra de 3 USDC: ${enlaceTx(compra)}`);
 console.log(`Presupuesto del agente, ${PRESUPUESTO_AGENTE} USDC: ${enlaceTx(presupuesto)}`);
